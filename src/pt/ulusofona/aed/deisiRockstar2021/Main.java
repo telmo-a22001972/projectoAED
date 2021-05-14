@@ -3,18 +3,16 @@ package pt.ulusofona.aed.deisiRockstar2021;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
 
 
 public class Main {
-    public static ArrayList < Song > teste6 = new ArrayList < > ();
-    public static ArrayList < Song > getSongsArray = new ArrayList < > ();
-    public static ArrayList < Artista > testeSongArtists = new ArrayList < > ();
-    public static ArrayList < Artista > testeSongArtistsFinal = new ArrayList < > ();
-    public static ArrayList < Song > testeSongDetails = new ArrayList < Song > ();
-    public static ArrayList < Song > testeSongDetailsFinal = new ArrayList < Song > ();
+    public static ArrayList < Song > songsArray = new ArrayList < > ();
+    public static ArrayList < Song > songsArrayFinal = new ArrayList < > ();
+    public static ArrayList < Artista > songArtists = new ArrayList < > ();
+    public static ArrayList < Artista > songArtistsFinal = new ArrayList < > ();
+    public static ArrayList < Song > songDetails = new ArrayList < Song > ();
+    public static ArrayList < Song > songDetailsFinal = new ArrayList < Song > ();
     public static ParseInfo parseInfoSongsTxT = new ParseInfo(0, 0);
     public static ParseInfo parseInfoSongsArtistsTxT = new ParseInfo(0, 0);
     public static ParseInfo parseInfoSongsDetailsTxT = new ParseInfo(0, 0);
@@ -29,40 +27,32 @@ public class Main {
         teste7 = getSongs();
         ParseInfo teste8 = getParseInfo("songs.txt");
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
-        //System.out.println(teste7.toString());
-        //System.out.println(teste8.toString());
-        //System.out.println(getSongsArray.size());
-        //System.out.println(parseInfoSongsTxTFinal.toString());
+
 
     }
 
     public static void loadFiles() throws IOException {
-        //Aqui lê-se o ficheiro songs.txt
-        //System.out.println("----------------------LEITURA DO FICHEIRO songs.txt------------");
+
+        System.out.println("----------------------LEITURA DO FICHEIRO songs.txt------------");
 
         lerFicheiros.lerSongs();
-        //System.out.println(getSongsArray.toString());
-        //System.out.println("Ok: " + parseInfoSongsTxT.numLinhasOk + ", Ignored: " + parseInfoSongsTxT.numLinhasIgnored + "\n");
 
 
-        //System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
+
+        System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
 
         lerFicheiros.lerSongsArtists();
 
-        //System.out.println(testeSongArtistsFinal.toString());
-        //System.out.println("Ok: " + parseInfoSongsArtistsTxTFinal.numLinhasOk + ", Ignored: " + parseInfoSongsArtistsTxTFinal.numLinhasIgnored + "\n");
 
 
         System.out.println("----------------------LEITURA DO FICHEIRO song_details.txt------------");
-        //Aqui lê-se o ficheiro song_details.txt
 
         lerFicheiros.lerSongDetails();
 
-        //System.out.println("Ok: " + parseInfoSongsDetailsTxTFinal.numLinhasOk + ", Ignored: " + parseInfoSongsDetailsTxTFinal.numLinhasIgnored);
     }
 
     public static ArrayList < Song > getSongs() {
-        return getSongsArray;
+        return songsArrayFinal;
     }
 
     public static ParseInfo getParseInfo(String fileName) {

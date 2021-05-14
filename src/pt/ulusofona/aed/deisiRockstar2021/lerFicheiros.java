@@ -46,11 +46,11 @@ public class lerFicheiros {
                 parseInfoSongsTxT.numLinhasOk += 1;
 
                 Song song = new Song(idTemaMusical, nome, null, anoLancamento, 0, false, 0, 0, 0, 0);
-                teste6.add(song);
+                songsArray.add(song);
             }
             reader.close();
-            Main.getSongsArray = (ArrayList< Song >) teste6.clone();
-            teste6.clear();
+            Main.songsArrayFinal = (ArrayList< Song >) songsArray.clone();
+            songsArray.clear();
             parseInfoSongsTxTFinal = new ParseInfo(parseInfoSongsTxT);
             parseInfoSongsTxT.reset();
             //System.out.println(parseInfoSongsTxTFinal.toString());
@@ -98,12 +98,12 @@ public class lerFicheiros {
                 parseInfoSongsArtistsTxT.numLinhasOk += 1;
 
                 Artista artista2 = new Artista(idTemaMusical, artista);
-                testeSongArtists.add(artista2);
+                songArtists.add(artista2);
             }
             readerSongArtists.close();
             //System.out.println(testeSongArtists.size());
-            testeSongArtistsFinal = (ArrayList < Artista>) testeSongArtists.clone();
-            testeSongArtists.clear();
+            songArtistsFinal = (ArrayList < Artista>) songArtists.clone();
+            songArtists.clear();
             parseInfoSongsArtistsTxTFinal = new ParseInfo(parseInfoSongsArtistsTxT);
             parseInfoSongsArtistsTxT.reset();
             //System.out.println(parseInfoSongsArtistsTxTFinal.toString());
@@ -159,11 +159,11 @@ public class lerFicheiros {
                 double volumeMedio = Double.parseDouble(dadosFinais[6]);
                 //System.out.println(volumeMedio);
                 Song song = new Song(idTemaMusical, null, null, 0, duracao, letra, populariedade, dancabilidade, vivacidade, volumeMedio);
-                testeSongDetails.add(song);
+                songDetails.add(song);
             }
             reader.close();
-            testeSongDetailsFinal = (ArrayList < Song >) testeSongDetails.clone();
-            testeSongDetails.clear();
+            songDetailsFinal = (ArrayList < Song >) songDetails.clone();
+            songDetails.clear();
             //System.out.println(testeSongDetailsFinal.size());
             parseInfoSongsDetailsTxTFinal = new ParseInfo(parseInfoSongsDetailsTxT);
             //System.out.println(parseInfoSongsDetailsTxTFinal.toString());
