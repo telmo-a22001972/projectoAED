@@ -3,7 +3,7 @@ package pt.ulusofona.aed.deisiRockstar2021;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.ArrayList;
-
+import java.util.Scanner;
 
 
 public class Main {
@@ -21,13 +21,13 @@ public class Main {
     public static ParseInfo parseInfoSongsDetailsTxTFinal = new ParseInfo(0, 0);
 
     public static void main(String[] args) throws IOException {
-        ArrayList < Song > teste7 = new ArrayList < Song > ();
+
         loadFiles();
 
-        teste7 = getSongs();
-        ParseInfo teste8 = getParseInfo("songs.txt");
+
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
+        Queries.menu();
 
     }
 
@@ -36,7 +36,6 @@ public class Main {
         System.out.println("----------------------LEITURA DO FICHEIRO songs.txt------------");
 
         lerFicheiros.lerSongs();
-
 
 
         System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
