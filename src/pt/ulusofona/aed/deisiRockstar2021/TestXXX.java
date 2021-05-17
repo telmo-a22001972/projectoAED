@@ -28,5 +28,16 @@ public class TestXXX {
         Assert.assertEquals("1oYYd2gnWZYrt89EBXdFiO | Message In A Bottle | 1979",song1.toString());
     }
 
+    @Test
+    public void testeGetSongsYear() throws IOException {
+        Main.loadFiles();
+        Assert.assertEquals("2016",Queries.execute("GET_SONGS_YEAR 2000"));
+    }
+
+    @Test
+    public void testeSepararArtistas() throws IOException {
+
+    }
+
 
 }

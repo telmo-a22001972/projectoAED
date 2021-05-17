@@ -93,20 +93,18 @@ public class lerFicheiros {
                     parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
                     continue;
                 }
-
-
                 parseInfoSongsArtistsTxT.numLinhasOk += 1;
 
-                Artista artista2 = new Artista(idTemaMusical, artista);
-                songArtists.add(artista2);
+
+                separarArtistas(artista,idTemaMusical);
             }
             readerSongArtists.close();
-            //System.out.println(testeSongArtists.size());
+
             songArtistsFinal = (ArrayList < Artista>) songArtists.clone();
             songArtists.clear();
             parseInfoSongsArtistsTxTFinal = new ParseInfo(parseInfoSongsArtistsTxT);
             parseInfoSongsArtistsTxT.reset();
-            //System.out.println(parseInfoSongsArtistsTxTFinal.toString());
+
 
         }  catch (FileNotFoundException e) {
             System.out.println("Ficheiro não encontrado");
@@ -173,6 +171,32 @@ public class lerFicheiros {
         } catch (IOException e) {
             System.out.println("Ocorreu um erro durante a leitura");
         }
+    }
+
+    public static void separarArtistas(String artistas, String idTemaMusical) {
+        String arrayArtistas[] = artistas.split(",");
+
+        String artistasTrim[] = new String[arrayArtistas.length];
+
+
+
+        for (int i = 0; i < artistasTrim.length; i++){
+            artistasTrim[i] = arrayArtistas[i].trim();
+        }
+
+        for (int u = 0; u < artistasTrim.length; u++) {
+
+            while (artistasTrim[u].charAt(0)<65 || artistasTrim[u].charAt(0)>90){
+                artistasTrim[u] = artistasTrim[u].substring(1);
+            }
+
+            while (artistasTrim[u].charAt(artistasTrim[u].length()-1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length()-1) == 39){
+                artistasTrim[u] = artistasTrim[u].substring(0,artistasTrim[u].length()-1);
+            }
+            Artista loop = new Artista(idTemaMusical,artistasTrim[u]);
+            songArtists.add(loop);
+        }
+
     }
 
 }
