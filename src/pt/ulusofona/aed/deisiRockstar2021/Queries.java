@@ -30,13 +30,21 @@ public class Queries {
 
 
         switch (comando){
-            case "GET_SONGS_YEAR" :
+            case "COUNT_SONGS_YEAR" :
                 String numeroMusicas = getSongsYear(command);
                 return numeroMusicas;
 
             case "COUNT_DUPLICATE_SONGS_YEAR" :
+                //VER O FICHEIRO TESTESTRING! !!!!!
                 String musicasRepetidas = getDuplicateSongsYear(command);
                 return musicasRepetidas;
+
+            case "GET_ARTISTS_FOR_TAG" :
+                //USAR HAASHMAP OU HASHSET , NO ADD TAGS CRIAR UM ARRAYLIST COM OS ARTISTAS
+                //E ATRIBUIR ESSE ARRAYLIST AO NOME DA TAG NUM HASHMAP OU HASHSET
+                //NA GET ARTISTS FOR TAG -> FAZER UMA FUNÇÃO EM QUE DÁ RETURN NO ARRAYLIST DESSA TAG
+
+
 
             default:
                return "Illegal command. Try again";
