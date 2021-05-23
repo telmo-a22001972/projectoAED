@@ -1,7 +1,6 @@
 package pt.ulusofona.aed.deisiRockstar2021;
 
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class Queries {
 
@@ -72,8 +71,26 @@ public class Queries {
 
     public static String getDuplicateSongsYear(String comando) {
         Scanner separador = new Scanner(comando);
+        ArrayList< Song > songsXAno = new ArrayList < > ();
         String lixo = separador.next();
         int ano = separador.nextInt(), count = 0;
+
+        for (int i = 0; i < Main.songsArrayFinal.size(); i++) {
+            if (Main.songsArrayFinal.get(i).anoLancamento == ano) {
+                songsXAno.add(Main.songsArrayFinal.get(i));
+
+            }
+        }
+        songsXAno.sort(Comparator.comparing((Song musica) -> musica.titulo));
+
+        for (int primeiroLoop = 0; primeiroLoop < songsXAno.size(); primeiroLoop++) {
+            if (primeiroLoop != 0 && songsXAno.get(primeiroLoop).titulo.equals(songsXAno.get(primeiroLoop - 1).titulo)) {
+                continue;
+            }else if (songsXAno.get(primeiroLoop).titulo.equals(songsXAno.get(primeiroLoop + 1).titulo)) {
+                count++;
+            }
+
+        }
 
 
         return String.valueOf(count);
