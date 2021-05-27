@@ -1,5 +1,5 @@
-7dD5DEzjhofoItSG7QwVoY @ ['Vanessa Bell Armstrong, Patti Austin, Bernie K.’]
-5TnAnWRXDM6awfvAveK91N @ ['Mountain John']
+7dD5DEzjhofoItSG7QwVoY @ "['Vanessa Bell Armstrong, Patti Austin, Bernie K.’]
+5TnAnWRXDM6awfvAveK91N @ """['Mountain John']
 @@
 @ @
 @ ['Mountain John']

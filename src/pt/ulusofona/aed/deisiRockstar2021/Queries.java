@@ -24,18 +24,20 @@ public class Queries {
 
     public static String execute(String command) {
 
-        Scanner separador = new Scanner(command);
-        String comando = separador.next();
+        String[] comando = command.split(" ");
+        String accao = comando[0];
+        int numero = Integer.parseInt(comando[1]);
 
 
-        switch (comando){
+
+        switch (accao){
             case "COUNT_SONGS_YEAR" :
-                String numeroMusicas = getSongsYear(command);
+                String numeroMusicas = getSongsYear(numero);
                 return numeroMusicas;
 
             case "COUNT_DUPLICATE_SONGS_YEAR" :
                 //VER O FICHEIRO TESTESTRING! !!!!!
-                String musicasRepetidas = getDuplicateSongsYear(command);
+                String musicasRepetidas = getDuplicateSongsYear(numero);
                 return musicasRepetidas;
 
             case "GET_ARTISTS_FOR_TAG" :
@@ -51,11 +53,7 @@ public class Queries {
 
     }
 
-    public static String getSongsYear(String comando){
-
-        Scanner separador = new Scanner(comando);
-        String lixo = separador.next();
-        int ano = separador.nextInt();
+    public static String getSongsYear(int ano){
 
         Iterator<Song> listaDeMusicas = Main.songsArrayFinal.iterator();
         int count = 0;
@@ -69,11 +67,11 @@ public class Queries {
 
     }
 
-    public static String getDuplicateSongsYear(String comando) {
-        Scanner separador = new Scanner(comando);
+    public static String getDuplicateSongsYear(int ano) {
+
         ArrayList< Song > songsXAno = new ArrayList < > ();
-        String lixo = separador.next();
-        int ano = separador.nextInt(), count = 0;
+
+        int count = 0;
 
         for (int i = 0; i < Main.songsArrayFinal.size(); i++) {
             if (Main.songsArrayFinal.get(i).anoLancamento == ano) {

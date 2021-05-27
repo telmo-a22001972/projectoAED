@@ -23,16 +23,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         loadFiles();
-
+        //NÃO ESTÁ A LER O FICHEIRO SONG_ARTISTS DOS PROFESSORES.
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
-        System.out.println(songDetailsFinal.toString());
-        //Perguntar se é suposto dar merge no que é lido dos ficheiro por exemplo:
-        //no ficheiro songs é lido a musica com o ID - 0xJ6Xr620TwVr6kqDSk5tn
-        //Eu quando leio o song_details se houver uma musica com o ID - 0xJ6Xr620TwVr6kqDSk5tn
-        //Devo juntar os objetos Song do songs.txt com  o id, titulo e ano com o Song do song_details.txt
-        //Que tem as o id, e as métricas das musicas?
+        System.out.println(songArtistsFinal.toString());
+
         Queries.menu();
 
     }
@@ -41,18 +37,26 @@ public class Main {
 
         System.out.println("----------------------LEITURA DO FICHEIRO songs.txt------------");
 
+        long start = System.currentTimeMillis();
         lerFicheiros.lerSongs();
+        long end = System.currentTimeMillis();
+        System.out.println("(took " + (end - start) + " ms)\n");
 
 
         System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
+
 
         lerFicheiros.lerSongsArtists();
 
 
 
+
         System.out.println("----------------------LEITURA DO FICHEIRO song_details.txt------------");
 
+        long start3 = System.currentTimeMillis();
         lerFicheiros.lerSongDetails();
+        long end4 = System.currentTimeMillis();
+        System.out.println("(took " + (end4 - start3) + " ms)\n");
 
     }
 

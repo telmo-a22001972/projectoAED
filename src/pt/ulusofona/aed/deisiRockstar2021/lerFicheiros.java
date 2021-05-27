@@ -15,6 +15,7 @@ public class lerFicheiros {
 
 
     public static void lerSongs(){
+
         try {
             String linhaSongs = null;
             FileReader fr = new FileReader("songs.txt");
