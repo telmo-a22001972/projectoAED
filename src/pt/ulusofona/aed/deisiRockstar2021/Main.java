@@ -51,6 +51,7 @@ public class Main {
 
 
 
+
         System.out.println("----------------------LEITURA DO FICHEIRO song_details.txt------------");
 
         long start3 = System.currentTimeMillis();
