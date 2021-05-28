@@ -28,7 +28,6 @@ public class Main {
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
         System.out.println(songArtistsFinal.toString());
-
         Queries.menu();
 
     }

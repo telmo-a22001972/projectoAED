@@ -27,7 +27,10 @@ public class Song {
         this.vivacidade = vivacidade;
         this.volumeMedio = volumeMedio;
     }
-    Song() {
+    Song(String ID, String Titulo, int anoLancamento) {
+        this.anoLancamento = anoLancamento;
+        this.id = ID;
+        this.titulo = Titulo;
 
     }
 

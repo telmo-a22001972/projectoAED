@@ -46,7 +46,7 @@ public class lerFicheiros {
                 int anoLancamento = Integer.parseInt(dadosFinais[2]);
                 parseInfoSongsTxT.numLinhasOk += 1;
 
-                Song song = new Song(idTemaMusical, nome, null, anoLancamento, 0, false, 0, 0, 0, 0);
+                Song song = new Song(idTemaMusical, nome, anoLancamento);
                 songsArray.add(song);
             }
             reader.close();
@@ -187,11 +187,11 @@ public class lerFicheiros {
 
         for (int u = 0; u < artistasTrim.length; u++) {
 
-            while (artistasTrim[u].charAt(0)<65 || artistasTrim[u].charAt(0)>90){
+            while (artistasTrim[u].charAt(0) == '[' || artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39){
                 artistasTrim[u] = artistasTrim[u].substring(1);
             }
 
-            while (artistasTrim[u].charAt(artistasTrim[u].length()-1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length()-1) == 39){
+            while (artistasTrim[u].charAt(artistasTrim[u].length()-1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length()-1) == 39 || artistasTrim[u].charAt(artistasTrim[u].length()-1) == 34 ){
                 artistasTrim[u] = artistasTrim[u].substring(0,artistasTrim[u].length()-1);
             }
             Artista loop = new Artista(idTemaMusical,artistasTrim[u]);
