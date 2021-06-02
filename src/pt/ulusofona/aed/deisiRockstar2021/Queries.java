@@ -55,7 +55,7 @@ public class Queries {
 
     public static String getSongsYear(int ano){
 
-        Iterator<Song> listaDeMusicas = Main.songsArrayFinal.iterator();
+        Iterator<Song> listaDeMusicas = Main.hashMapSongs.iterator();
         int count = 0;
         while (listaDeMusicas.hasNext()) {
             Song musica = listaDeMusicas.next();
@@ -73,9 +73,9 @@ public class Queries {
 
         int count = 0;
 
-        for (int i = 0; i < Main.songsArrayFinal.size(); i++) {
-            if (Main.songsArrayFinal.get(i).anoLancamento == ano) {
-                songsXAno.add(Main.songsArrayFinal.get(i));
+        for (int i = 0; i < Main.hashMapSongs.size(); i++) {
+            if (Main.hashMapSongs.get(i).anoLancamento == ano) {
+                songsXAno.add(Main.hashMapSongs.get(i));
 
             }
         }

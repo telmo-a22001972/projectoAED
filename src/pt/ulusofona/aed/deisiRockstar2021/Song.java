@@ -47,7 +47,7 @@ public class Song {
     }
     public String toString(){
 
-        return id+" | "+ titulo +" | "+ anoLancamento +" | "+duracaoDoTema+" | "+popularidade+" | "+ obterNomeArtistas(artistas);
+        return id+" | "+ titulo +" | "+ anoLancamento +" | "+duracaoDoTema+" | "+popularidade+" | "+ Arrays.toString(artistas);
     }
 
 
