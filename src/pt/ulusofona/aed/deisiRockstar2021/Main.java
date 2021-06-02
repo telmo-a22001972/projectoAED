@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//ESTÃ A DEMORAR MUITO TEMPO NO SONG_ARTISTS
 
 public class Main {
     public static ArrayList < Song > songsArray = new ArrayList < > ();
@@ -27,7 +28,7 @@ public class Main {
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
-        System.out.println(songArtistsFinal.toString());
+        //System.out.println(songArtistsFinal.toString());
         Queries.menu();
 
     }
@@ -44,8 +45,10 @@ public class Main {
 
         System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
 
-
+        long startArtists = System.currentTimeMillis();
         lerFicheiros.lerSongsArtists();
+        long endArtists = System.currentTimeMillis();
+        System.out.println("(took " + (endArtists - startArtists) + " ms)\n");
 
 
 
@@ -53,10 +56,10 @@ public class Main {
 
         System.out.println("----------------------LEITURA DO FICHEIRO song_details.txt------------");
 
-        long start3 = System.currentTimeMillis();
+        long startDetails = System.currentTimeMillis();
         lerFicheiros.lerSongDetails();
-        long end4 = System.currentTimeMillis();
-        System.out.println("(took " + (end4 - start3) + " ms)\n");
+        long endDetails = System.currentTimeMillis();
+        System.out.println("(took " + (endDetails - startDetails) + " ms)\n");
 
     }
 

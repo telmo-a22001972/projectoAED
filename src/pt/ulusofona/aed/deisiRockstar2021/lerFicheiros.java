@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.*;
 
 import static pt.ulusofona.aed.deisiRockstar2021.Main.*;
 
@@ -64,6 +65,7 @@ public class lerFicheiros {
 
     }
 
+
     public static void lerSongsArtists() {
         try {
             String linha = null;
@@ -86,6 +88,8 @@ public class lerFicheiros {
 
                 String idTemaMusical = dadosFinais[0];
                 String artista = dadosFinais[1];
+
+                boolean existeID = existeID(songsArrayFinal, idTemaMusical);
                 if (idTemaMusical.isEmpty() && artista.isEmpty()){
                     parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
                     continue;
@@ -95,7 +99,10 @@ public class lerFicheiros {
                     continue;
                 }
                 parseInfoSongsArtistsTxT.numLinhasOk += 1;
-
+                if (!existeID){
+                    parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
+                    continue;
+                }
 
                 separarArtistas(artista,idTemaMusical);
             }
@@ -112,6 +119,7 @@ public class lerFicheiros {
         } catch (IOException e) {
             System.out.println("Ocorreu um erro durante a leitura");
         }
+
     }
 
     public static void lerSongDetails() {
@@ -174,30 +182,78 @@ public class lerFicheiros {
         }
     }
 
+
     public static void separarArtistas(String artistas, String idTemaMusical) {
-        String arrayArtistas[] = artistas.split(",");
+        String[] arrayArtistas = artistas.split(",");
+        String teste = arrayArtistas[0];
 
-        String artistasTrim[] = new String[arrayArtistas.length];
+        //Aqui vão ficar os artistas depois do trim
+        String[] artistasTrim = new String[arrayArtistas.length];
+        Artista[] artistasSong = new Artista[arrayArtistas.length];
 
 
+        boolean artistaVazio = false;
+
+        //Aqui vai ser feito o trim dos artistas 1 a 1
 
         for (int i = 0; i < artistasTrim.length; i++){
             artistasTrim[i] = arrayArtistas[i].trim();
         }
 
+
+        //Aqui é feito a remoção dos caracteres desnecessários nos artistas
+
         for (int u = 0; u < artistasTrim.length; u++) {
 
-            while (artistasTrim[u].charAt(0) == '[' || artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39){
+            //Vai remover os caracteres do ínicio que sejam ([, ' , ")
+            while (artistasTrim[u].startsWith("[")|| artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39){
+                //Elimina o caracter
                 artistasTrim[u] = artistasTrim[u].substring(1);
+
+                //Vê o tamanho da string para não eliminar o caracter de uma string vazia
+                if (artistasTrim[u].length() == 0) {
+                    //Este artistaVazio vai ser usado para saber se se utiliza a linha ou não
+                    artistaVazio = true;
+                    break;
+                }
+
             }
 
-            while (artistasTrim[u].charAt(artistasTrim[u].length()-1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length()-1) == 39 || artistasTrim[u].charAt(artistasTrim[u].length()-1) == 34 ){
-                artistasTrim[u] = artistasTrim[u].substring(0,artistasTrim[u].length()-1);
+            //Vai remover caracteres desnecessários no final a string dos artistas
+            if (artistasTrim[u].length() != 0) {
+            //Só entra se a string não for vazia para não dar crash
+                while (artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 39 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 34) {
+                    artistasTrim[u] = artistasTrim[u].substring(0, artistasTrim[u].length() - 1);
+                }
             }
-            Artista loop = new Artista(idTemaMusical,artistasTrim[u]);
-            songArtists.add(loop);
+
         }
 
+
+        //Aqui vê-se se foi detetado algum artista vazio
+        //E se tal acontecer então não utiliza a linha
+
+        if (!artistaVazio) {
+            for (int count = 0; count < artistasTrim.length; count++){
+                artistasSong[count] = new Artista(idTemaMusical, artistasTrim[count]);
+            }
+            for (int k = 0; k < songsArrayFinal.size(); k++){
+                    if (songsArrayFinal.get(k).id.equals(idTemaMusical)) {
+                        songsArrayFinal.get(k).artistas = artistasSong;
+                    }
+
+            }
+        }
+
+    }
+
+    public static boolean existeID(ArrayList<Song> songsArrayFinal ,String idTemaMusical) {
+
+        for (Song musica : songsArrayFinal){
+            if (songsArrayFinal.get(0).id.equals(musica.id))
+                return true;
+        }
+        return false;
     }
 
 }

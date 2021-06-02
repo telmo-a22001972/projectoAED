@@ -1,6 +1,8 @@
 package pt.ulusofona.aed.deisiRockstar2021;
 
 
+import java.util.Arrays;
+
 public class Song {
     String id;
     String titulo;
@@ -34,9 +36,18 @@ public class Song {
 
     }
 
+    public static String obterNomeArtistas(Artista[] artistas){
+        String nomesArtistas = artistas[0].nome;
+
+        for (int k = 1; k < artistas.length; k++) {
+                nomesArtistas += (" / "+artistas[k].nome);
+            }
+
+        return nomesArtistas.toString();
+    }
     public String toString(){
 
-        return id+" | "+ titulo +" | "+ anoLancamento;
+        return id+" | "+ titulo +" | "+ anoLancamento +" | "+duracaoDoTema+" | "+popularidade+" | "+ obterNomeArtistas(artistas);
     }
 
 
