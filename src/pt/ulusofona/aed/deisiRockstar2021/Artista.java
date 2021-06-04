@@ -13,6 +13,6 @@ public class Artista {
 
     }
     public String toString(){
-        return id+" | "+nome;
+        return nome;
     }
 }

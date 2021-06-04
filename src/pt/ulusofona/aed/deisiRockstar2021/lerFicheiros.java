@@ -109,6 +109,7 @@ public class lerFicheiros {
                     continue;
                 }
 
+
                 separarArtistas(artista,idTemaMusical);
 
 
@@ -172,7 +173,6 @@ public class lerFicheiros {
 
                 adicionarDetails(dadosFinais);
 
-
                 //String idTemaMusical = dadosFinais[0];
 
 
@@ -204,6 +204,10 @@ public class lerFicheiros {
             parseInfoSongsDetailsTxTFinal = new ParseInfo(parseInfoSongsDetailsTxT);
             //System.out.println(parseInfoSongsDetailsTxTFinal.toString());
             parseInfoSongsDetailsTxT.reset();
+            long startClonarEdarReset = System.currentTimeMillis();
+            clonarEdarReset();
+            long endClonarEdarReset = System.currentTimeMillis();
+            System.out.println("(Clonar e dar Reset - took " + (endClonarEdarReset - startClonarEdarReset) + " ms)\n");
         }  catch (FileNotFoundException e) {
             System.out.println("Ficheiro não encontrado");
         } catch (IOException e) {
@@ -285,19 +289,21 @@ public class lerFicheiros {
                     break;
             }
         }
-
-        parseInfoSongsDetailsTxT.numLinhasOk += 1;
         Song musica = hashMapComMusicasFinal.get(idTemaMusical);
+        if (musica.detalhesAdicionados){
+            parseInfoSongsDetailsTxT.numLinhasOk += 1;
+            return 0;
+        }
+        parseInfoSongsDetailsTxT.numLinhasOk += 1;
         musica.duracaoDoTema = duracao;
         musica.letraExplicita = boolLetraExplicita;
         musica.popularidade = popularidade;
         musica.dancabilidade = dancabilidade;
         musica.vivacidade = vivacidade;
         musica.volumeMedio = volumeMedio;
+        musica.detalhesAdicionados = true;
         hashMapComMusicasFinal.put(idTemaMusical,musica);
         songsTxt.add(musica);
-        songDetails.add(musica);
-        clonarEdarReset();
         return 0;
     }
 

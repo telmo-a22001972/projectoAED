@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static pt.ulusofona.aed.deisiRockstar2021.Queries.*;
 
-                                            //ESTÁ MUITO LENTO A ADICIONAR OS DETAILS
+                                            //FAZER O NUMERO DE MUSICAS DE CADA ARTISTA
 
 public class Main {
     public static ArrayList < Song > songsTxt = new ArrayList<>();
@@ -57,7 +57,7 @@ public class Main {
         long endArtists = System.currentTimeMillis();
         System.out.println("(took " + (endArtists - startArtists) + " ms)\n");
 
-        //System.out.println(hashMapComMusicasFinal.get("0cS0A1fUEUd1EW3FcF8AEI").toString());
+        System.out.println(hashMapComMusicasFinal.get("0cS0A1fUEUd1EW3FcF8AEI").toString());
 
 
 
