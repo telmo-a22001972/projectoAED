@@ -31,7 +31,7 @@ public class TestXXX {
     @Test
     public void testeGetSongsYear() throws IOException {
         Main.loadFiles();
-        Assert.assertEquals("2016",Queries.execute("GET_SONGS_YEAR 2000"));
+        Assert.assertEquals("2016",Main.execute("GET_SONGS_YEAR 2000"));
     }
 
     @Test

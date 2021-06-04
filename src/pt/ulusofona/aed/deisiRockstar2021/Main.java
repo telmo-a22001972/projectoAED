@@ -1,15 +1,18 @@
 
 package pt.ulusofona.aed.deisiRockstar2021;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.ArrayList;
 
-//ESTÃ A DEMORAR MUITO TEMPO NO SONG_ARTISTS
+import static pt.ulusofona.aed.deisiRockstar2021.Queries.*;
+
+                                            //ESTÁ MUITO LENTO A ADICIONAR OS DETAILS
 
 public class Main {
-    public static ArrayList < Song > songsArray = new ArrayList < > ();
-    public static ArrayList < Song > hashMapSongs = new ArrayList < > ();
+    public static ArrayList < Song > songsTxt = new ArrayList<>();
+    public static ArrayList < Song > songsTxtFinal = new ArrayList<>();
     public static ArrayList < Artista > songArtists = new ArrayList < > ();
     public static ArrayList < Artista > songArtistsFinal = new ArrayList < > ();
     public static ArrayList < Song > songDetails = new ArrayList < Song > ();
@@ -26,13 +29,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         loadFiles();
-        //NÃO ESTÁ A LER O FICHEIRO SONG_ARTISTS DOS PROFESSORES.
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
-        System.out.println(hashMapComMusicasFinal.get("3oGbHF3Kdwf3AsRCbBjUxu"));
+        //System.out.println(hashMapComMusicasFinal.toString());
+        //System.out.println(Arrays.toString(songArtistsFinal.toArray()));
+        //System.out.println(getSongs().toString());
 
+        System.out.println(getSongs().size());
         Queries.menu();
-
 
     }
 
@@ -53,7 +57,7 @@ public class Main {
         long endArtists = System.currentTimeMillis();
         System.out.println("(took " + (endArtists - startArtists) + " ms)\n");
 
-
+        //System.out.println(hashMapComMusicasFinal.get("0cS0A1fUEUd1EW3FcF8AEI").toString());
 
 
 
@@ -64,10 +68,12 @@ public class Main {
         long endDetails = System.currentTimeMillis();
         System.out.println("(took " + (endDetails - startDetails) + " ms)\n");
 
+        //System.out.println(hashMapComMusicasFinal.get("0cS0A1fUEUd1EW3FcF8AEI").toString());
+
     }
 
-    public static ArrayList < Song > getSongs() {
-        return hashMapSongs;
+    public static ArrayList< Song > getSongs() {
+        return songsTxtFinal;
     }
 
     public static ParseInfo getParseInfo(String fileName) {
@@ -83,5 +89,50 @@ public class Main {
         return null;
     }
 
+    public static String execute(String command) {
+
+        String[] comando = command.split(" ");
+        String accao = comando[0];
+        int numero = Integer.parseInt(comando[1]);
+
+
+
+        switch (accao){
+            case "COUNT_SONGS_YEAR" :
+                String numeroMusicas = getSongsYear(numero);
+                return numeroMusicas;
+
+            case "COUNT_DUPLICATE_SONGS_YEAR" :
+                //VER O FICHEIRO TESTESTRING! !!!!!
+                String musicasRepetidas = getDuplicateSongsYear(numero);
+                return musicasRepetidas;
+
+            case "GET_ARTISTS_FOR_TAG" :
+                //USAR HAASHMAP OU HASHSET , NO ADD TAGS CRIAR UM ARRAYLIST COM OS ARTISTAS
+                //E ATRIBUIR ESSE ARRAYLIST AO NOME DA TAG NUM HASHMAP OU HASHSET
+                //NA GET ARTISTS FOR TAG -> FAZER UMA FUNÇÃO EM QUE DÁ RETURN NO ARRAYLIST DESSA TAG
+
+
+
+            default:
+                return "Illegal command. Try again";
+        }
+
+    }
+
+    public static String getCreativeQuery()
+    {
+        return "TEMP";
+    }
+
+    public static int getTypeOfSecondParameter()
+    {
+        return 0;
+    }
+
+    public static String getVideoUrl()
+    {
+        return "TEMP";
+    }
 
 }

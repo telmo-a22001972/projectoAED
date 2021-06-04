@@ -42,12 +42,17 @@ public class lerFicheiros {
 
                 String idTemaMusical = dadosFinais[0];
                 String nome = dadosFinais[1];
-
-
                 int anoLancamento = Integer.parseInt(dadosFinais[2]);
+
+                if (hashMapComMusicasInicial.containsKey(idTemaMusical)){
+                    parseInfoSongsTxT.numLinhasIgnored += 1;
+                    continue;
+                }
+
                 parseInfoSongsTxT.numLinhasOk += 1;
 
                 hashMapComMusicasInicial.put(idTemaMusical, new Song(idTemaMusical, nome, anoLancamento));
+
             }
             reader.close();
             hashMapComMusicasFinal = (HashMap<String, Song>) hashMapComMusicasInicial.clone();
@@ -89,6 +94,7 @@ public class lerFicheiros {
                 String artista = dadosFinais[1];
 
                 boolean existeID = existeID(hashMapComMusicasFinal, idTemaMusical);
+
                 if (idTemaMusical.isEmpty() && artista.isEmpty()){
                     parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
                     continue;
@@ -97,9 +103,15 @@ public class lerFicheiros {
                     parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
                     continue;
                 }
-                parseInfoSongsArtistsTxT.numLinhasOk += 1;
+
+                if (!existeID){
+                    parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
+                    continue;
+                }
 
                 separarArtistas(artista,idTemaMusical);
+
+
             }
             readerSongArtists.close();
 
@@ -107,6 +119,7 @@ public class lerFicheiros {
             songArtists.clear();
             parseInfoSongsArtistsTxTFinal = new ParseInfo(parseInfoSongsArtistsTxT);
             parseInfoSongsArtistsTxT.reset();
+
 
 
         }  catch (FileNotFoundException e) {
@@ -118,7 +131,8 @@ public class lerFicheiros {
     }
 
     public static void lerSongDetails() {
-
+        boolean linhaDup = false;
+        boolean algoVazio = false;
         try {
             boolean letra = false;
             String linha= null;
@@ -136,32 +150,52 @@ public class lerFicheiros {
                     dadosFinais[count] = dados[count].trim();
                     if (dadosFinais[count].isEmpty()){
                         parseInfoSongsTxT.numLinhasIgnored += 1;
+                        algoVazio = true;
+                        break;
                     }
                 }
-
-                parseInfoSongsDetailsTxT.numLinhasOk += 1;
-                String idTemaMusical = dadosFinais[0];
-                //System.out.println(idTemaMusical);
-                int duracao = Integer.parseInt(dadosFinais[1]);
-                //System.out.println(duracao);
-                int letraExplicita = Integer.parseInt(dadosFinais[2]);
-                //System.out.println(letraExplicita);
-                if (letraExplicita == 0) {
-                    letra = false;
-                } else {
-                    letra = true;
+                if (algoVazio){
+                    algoVazio = false;
+                    continue;
                 }
-                //System.out.println(letra);
-                int populariedade = Integer.parseInt(dadosFinais[3]);
-                //System.out.println(populariedade);
-                double dancabilidade = Double.parseDouble(dadosFinais[4]);
-                //System.out.println(dancabilidade);
-                double vivacidade = Double.parseDouble(dadosFinais[5]);
-                //System.out.println(vivacidade);
-                double volumeMedio = Double.parseDouble(dadosFinais[6]);
-                //System.out.println(volumeMedio);
-                Song song = new Song(idTemaMusical, null, null, 0, duracao, letra, populariedade, dancabilidade, vivacidade, volumeMedio);
-                songDetails.add(song);
+
+                for (Song musica : songDetails){
+                    if (musica.id.equals(dadosFinais[0])){
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        linhaDup = true;
+                    }
+                }
+                if (linhaDup){
+                    linhaDup = false;
+                    continue;
+                }
+
+                adicionarDetails(dadosFinais);
+
+
+                //String idTemaMusical = dadosFinais[0];
+
+
+                //int duracao = 0;
+
+                //int letraExplicita = Integer.parseInt(dadosFinais[2]);
+
+                //if (letraExplicita == 0) {
+                    //letra = false;
+                //} else {
+                //    letra = true;
+                //}
+
+                //int populariedade = Integer.parseInt(dadosFinais[3]);
+
+                //double dancabilidade = Double.parseDouble(dadosFinais[4]);
+
+                //double vivacidade = Double.parseDouble(dadosFinais[5]);
+
+                //double volumeMedio = Double.parseDouble(dadosFinais[6]);
+
+                //Song song = new Song(idTemaMusical, null, null, 0, duracao, letra, populariedade, dancabilidade, vivacidade, volumeMedio);
+                //songDetails.add(song);
             }
             reader.close();
             songDetailsFinal = (ArrayList < Song >) songDetails.clone();
@@ -177,10 +211,133 @@ public class lerFicheiros {
         }
     }
 
+    public static int adicionarDetails(String[] dados){
+        String idTemaMusical = null;
+        int duracao = 0;
+        int letraExplicita = 0;
+        int popularidade = 0;
+        double dancabilidade = 0;
+        double vivacidade = 0;
+        double volumeMedio = 0;
+        boolean boolLetraExplicita = false;
 
+        for (int i = 0; i < dados.length; i++) {
+
+            switch (i){
+
+                case 0:
+                    idTemaMusical = dados[i];
+                    if (!existeID(hashMapComMusicasFinal, idTemaMusical)) {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+                case 1:
+                    if (numeroInteiro(dados[i])) {
+                        duracao = Integer.parseInt(dados[i]);
+                    } else {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+                case 2:
+                    if (numeroInteiro(dados[i])) {
+                        letraExplicita = Integer.parseInt(dados[i]);
+                        if (letraExplicita == 1)
+                            boolLetraExplicita = true;
+
+                    } else {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+                case 3:
+                    if (numeroInteiro(dados[i])) {
+                        popularidade = Integer.parseInt(dados[i]);
+                    } else {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+                case 4:
+                    if (numeroDoubble(dados[i])) {
+                        dancabilidade = Double.parseDouble(dados[i]);
+                    } else {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+                case 5:
+                    if (numeroDoubble(dados[i])) {
+                        vivacidade = Double.parseDouble(dados[i]);
+                    } else {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+                case 6:
+                    if (numeroDoubble(dados[i])) {
+                        volumeMedio = Double.parseDouble(dados[i]);
+                    } else {
+                        parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                        return 0;
+                    }
+                    break;
+            }
+        }
+
+        parseInfoSongsDetailsTxT.numLinhasOk += 1;
+        Song musica = hashMapComMusicasFinal.get(idTemaMusical);
+        musica.duracaoDoTema = duracao;
+        musica.letraExplicita = boolLetraExplicita;
+        musica.popularidade = popularidade;
+        musica.dancabilidade = dancabilidade;
+        musica.vivacidade = vivacidade;
+        musica.volumeMedio = volumeMedio;
+        hashMapComMusicasFinal.put(idTemaMusical,musica);
+        songsTxt.add(musica);
+        songDetails.add(musica);
+        clonarEdarReset();
+        return 0;
+    }
+
+    public static void clonarEdarReset(){
+        songsTxtFinal = (ArrayList<Song>) songsTxt.clone();
+        songsTxt.clear();
+    }
+    public static boolean numeroInteiro(String string){
+        int numero;
+
+        if (string == null || string.equals(""))
+        {
+            return false;
+        }
+
+        try{
+            numero = Integer.parseInt(string);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean numeroDoubble(String string){
+        double numero;
+
+        if (string == null || string.equals(""))
+            return false;
+
+        try{
+            numero = Double.parseDouble(string);
+        }catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
+    }
     public static void separarArtistas(String artistas, String idTemaMusical) {
         String[] arrayArtistas = artistas.split(",");
-        String teste = arrayArtistas[0];
 
         //Aqui vão ficar os artistas depois do trim
         String[] artistasTrim = new String[arrayArtistas.length];
@@ -190,7 +347,6 @@ public class lerFicheiros {
         boolean artistaVazio = false;
 
         //Aqui vai ser feito o trim dos artistas 1 a 1
-
         for (int i = 0; i < artistasTrim.length; i++){
             artistasTrim[i] = arrayArtistas[i].trim();
         }
@@ -229,17 +385,23 @@ public class lerFicheiros {
         //E se tal acontecer então não utiliza a linha
 
         if (!artistaVazio) {
+
             for (int count = 0; count < artistasTrim.length; count++){
                 //Cria array de artistas
                 artistasSong[count] = new Artista(idTemaMusical, artistasTrim[count]);
             }
             if (existeID(hashMapComMusicasFinal, idTemaMusical)){
+                parseInfoSongsArtistsTxT.numLinhasOk += 1;
                 Song musicaNova = hashMapComMusicasFinal.get(idTemaMusical);
                 musicaNova.artistas = artistasSong;
                 hashMapComMusicasFinal.put(idTemaMusical,musicaNova);
             }
 
+        } else {
+            parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
         }
+
+
 
     }
 
@@ -251,7 +413,5 @@ public class lerFicheiros {
         return false;
     }
 
-    public static void adicionaArrayArtistas(Artista[] artistasAAdicionar){
 
-    }
 }

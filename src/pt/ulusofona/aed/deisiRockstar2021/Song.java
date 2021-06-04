@@ -35,7 +35,15 @@ public class Song {
         this.titulo = Titulo;
 
     }
+    Song(int duracao, boolean letraExplicita, int popularidade,double dancabilidade, double vivacidade, double volumeMedio){
+        this.duracaoDoTema = duracao;
+        this.letraExplicita = letraExplicita;
+        this.popularidade = popularidade;
+        this.dancabilidade = dancabilidade;
+        this.vivacidade = vivacidade;
+        this.volumeMedio = volumeMedio;
 
+    }
     public static String obterNomeArtistas(Artista[] artistas){
         String nomesArtistas = artistas[0].nome;
 
@@ -47,7 +55,7 @@ public class Song {
     }
     public String toString(){
 
-        return id+" | "+ titulo +" | "+ anoLancamento +" | "+duracaoDoTema+" | "+popularidade+" | "+ Arrays.toString(artistas);
+        return id+" | "+ titulo +" | "+ anoLancamento +" | "+duracaoDoTema+" | "+popularidade+" | "+ obterNomeArtistas(artistas);
     }
 
 
