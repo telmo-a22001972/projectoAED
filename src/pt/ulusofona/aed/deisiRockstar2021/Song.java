@@ -2,6 +2,7 @@ package pt.ulusofona.aed.deisiRockstar2021;
 
 
 import java.util.Arrays;
+import java.util.function.IntToDoubleFunction;
 
 public class Song {
     String id;
@@ -15,6 +16,8 @@ public class Song {
     double vivacidade;
     double volumeMedio;
     Boolean detalhesAdicionados;
+    String nMusicas;
+    String toString;
 
     Song(String ID, String Titulo, Artista[] Artista, int AnoLancamento, int duracaoDoTema, boolean letraExplicita,
          int popularidade, double dancabilidade, double vivacidade, double volumeMedio){
@@ -48,33 +51,70 @@ public class Song {
 
     }
     public static String obterNomeArtistas(Artista[] artistas){
-        String nomesArtistas = artistas[0].nome;
+        String nomesArtistas;
+        if (artistas == null){
+            return "null";
+        }else {
 
-        for (int k = 1; k < artistas.length; k++) {
-                nomesArtistas += (" / "+artistas[k].nome);
-            }
+            nomesArtistas = artistas[0].nome;
 
-        return nomesArtistas.toString();
-    }
-    public static int numeroMusicasDoArtista(String artista)
-    {
-        int numMusica = 0;
+            for (int k = 1; k < artistas.length; k++) {
+                if (!artistas[k].nome.isEmpty()) {
+                    nomesArtistas += (" / " + artistas[k].nome);
+                } else {
 
-        for (Song musica : Main.songsTxtFinal) {
-            for (int k = 0; k < musica.artistas.length; k++) {
-                if (musica.artistas[k].nome.equals(artista)){
-                    numMusica++;
                 }
             }
         }
-
-
-        return numMusica;
+        return nomesArtistas;
     }
+
+    public static void meterNmusicasNaString(Song musica){
+        int nMusicas = 0;
+        String nMusicasString = "";
+        if (musica.artistas != null) {
+            nMusicasString = String.valueOf(Main.hashMapComArtistasESuasMusicas.get(musica.artistas[0].nome));
+
+            for (int i = 1; i < musica.artistas.length; i++) {
+                nMusicas = Main.hashMapComArtistasESuasMusicas.get(musica.artistas[i].nome);
+                nMusicasString += " / " + String.valueOf(nMusicas);
+            }
+        }
+        musica.nMusicas = nMusicasString;
+    }
+
 
     public String toString(){
 
-        return id+" | "+ titulo +" | "+ anoLancamento +" | "+duracaoDoTema+" | "+popularidade+" | "+ obterNomeArtistas(artistas)+" | ";
+        return toString;
+    }
+
+    public static void fazerToString(Song musica){
+        String toString = "";
+        String duracaoTema;
+
+        toString += musica.id;
+        toString += " | "+musica.titulo;
+        toString += " | "+String.valueOf(musica.anoLancamento);
+
+        toString += " | "+String.valueOf((musica.duracaoDoTema/1000) / 60);
+        toString += ":"+String.valueOf((musica.duracaoDoTema/1000) % 60);
+
+        toString += " | "+String.valueOf(Double.valueOf(musica.popularidade));
+        toString += " | "+obterNomeArtistas(musica.artistas);
+        if (musica.artistas != null) {
+            int[] nMusicas = new int[musica.artistas.length];
+            for (int k = 0; k < nMusicas.length; k++) {
+                nMusicas[k] = Main.hashMapComArtistasESuasMusicas.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
+            }
+            for (int u = 0; u < musica.artistas.length; u++) {
+                musica.artistas[u].numeroDeMusicas = nMusicas[u];
+            }
+        }
+        meterNmusicasNaString(musica);
+        toString += " | ("+musica.nMusicas+")";
+
+        musica.toString = toString;
     }
 
 

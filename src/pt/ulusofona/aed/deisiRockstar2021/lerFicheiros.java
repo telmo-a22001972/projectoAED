@@ -51,7 +51,9 @@ public class lerFicheiros {
 
                 parseInfoSongsTxT.numLinhasOk += 1;
 
-                hashMapComMusicasInicial.put(idTemaMusical, new Song(idTemaMusical, nome, anoLancamento));
+                Song musica = new Song(idTemaMusical, nome, anoLancamento);
+                hashMapComMusicasInicial.put(idTemaMusical, musica);
+
 
             }
             reader.close();
@@ -173,29 +175,6 @@ public class lerFicheiros {
 
                 adicionarDetails(dadosFinais);
 
-                //String idTemaMusical = dadosFinais[0];
-
-
-                //int duracao = 0;
-
-                //int letraExplicita = Integer.parseInt(dadosFinais[2]);
-
-                //if (letraExplicita == 0) {
-                    //letra = false;
-                //} else {
-                //    letra = true;
-                //}
-
-                //int populariedade = Integer.parseInt(dadosFinais[3]);
-
-                //double dancabilidade = Double.parseDouble(dadosFinais[4]);
-
-                //double vivacidade = Double.parseDouble(dadosFinais[5]);
-
-                //double volumeMedio = Double.parseDouble(dadosFinais[6]);
-
-                //Song song = new Song(idTemaMusical, null, null, 0, duracao, letra, populariedade, dancabilidade, vivacidade, volumeMedio);
-                //songDetails.add(song);
             }
             reader.close();
             songDetailsFinal = (ArrayList < Song >) songDetails.clone();
@@ -204,10 +183,9 @@ public class lerFicheiros {
             parseInfoSongsDetailsTxTFinal = new ParseInfo(parseInfoSongsDetailsTxT);
             //System.out.println(parseInfoSongsDetailsTxTFinal.toString());
             parseInfoSongsDetailsTxT.reset();
-            long startClonarEdarReset = System.currentTimeMillis();
+
             clonarEdarReset();
-            long endClonarEdarReset = System.currentTimeMillis();
-            System.out.println("(Clonar e dar Reset - took " + (endClonarEdarReset - startClonarEdarReset) + " ms)\n");
+
         }  catch (FileNotFoundException e) {
             System.out.println("Ficheiro não encontrado");
         } catch (IOException e) {
@@ -291,7 +269,7 @@ public class lerFicheiros {
         }
         Song musica = hashMapComMusicasFinal.get(idTemaMusical);
         if (musica.detalhesAdicionados){
-            parseInfoSongsDetailsTxT.numLinhasOk += 1;
+            parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
             return 0;
         }
         parseInfoSongsDetailsTxT.numLinhasOk += 1;
@@ -303,14 +281,17 @@ public class lerFicheiros {
         musica.volumeMedio = volumeMedio;
         musica.detalhesAdicionados = true;
         hashMapComMusicasFinal.put(idTemaMusical,musica);
-        songsTxt.add(musica);
+        Song.fazerToString(musica);
+
         return 0;
     }
 
     public static void clonarEdarReset(){
+        songsTxt = new ArrayList<>(hashMapComMusicasFinal.values());
         songsTxtFinal = (ArrayList<Song>) songsTxt.clone();
         songsTxt.clear();
     }
+
     public static boolean numeroInteiro(String string){
         int numero;
 
@@ -342,13 +323,14 @@ public class lerFicheiros {
 
         return true;
     }
+
     public static void separarArtistas(String artistas, String idTemaMusical) {
         String[] arrayArtistas = artistas.split(",");
 
         //Aqui vão ficar os artistas depois do trim
         String[] artistasTrim = new String[arrayArtistas.length];
         Artista[] artistasSong = new Artista[arrayArtistas.length];
-
+        int musicas = 0;
 
         boolean artistaVazio = false;
 
@@ -362,13 +344,18 @@ public class lerFicheiros {
 
         for (int u = 0; u < artistasTrim.length; u++) {
 
+            if (artistasTrim[u].length() == 0) {
+                //Este artistaVazio vai ser usado para saber se se utiliza a linha ou não
+                artistaVazio = true;
+                break;
+            }
             //Vai remover os caracteres do ínicio que sejam ([, ' , ")
             while (artistasTrim[u].startsWith("[")|| artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39){
                 //Elimina o caracter
                 artistasTrim[u] = artistasTrim[u].substring(1);
 
                 //Vê o tamanho da string para não eliminar o caracter de uma string vazia
-                if (artistasTrim[u].length() == 0) {
+                if (artistasTrim[u].isEmpty()) {
                     //Este artistaVazio vai ser usado para saber se se utiliza a linha ou não
                     artistaVazio = true;
                     break;
@@ -377,10 +364,14 @@ public class lerFicheiros {
             }
 
             //Vai remover caracteres desnecessários no final a string dos artistas
-            if (artistasTrim[u].length() != 0) {
+            if (!artistasTrim[u].isEmpty()) {
                 //Só entra se a string não for vazia para não dar crash
                 while (artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 39 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 34) {
                     artistasTrim[u] = artistasTrim[u].substring(0, artistasTrim[u].length() - 1);
+                    if (artistasTrim[u].isEmpty()){
+                        artistaVazio = true;
+                        break;
+                    }
                 }
             }
 
@@ -395,12 +386,20 @@ public class lerFicheiros {
             for (int count = 0; count < artistasTrim.length; count++){
                 //Cria array de artistas
                 artistasSong[count] = new Artista(idTemaMusical, artistasTrim[count]);
+
             }
             if (existeID(hashMapComMusicasFinal, idTemaMusical)){
                 parseInfoSongsArtistsTxT.numLinhasOk += 1;
+                for (Artista artistaParaMusica : artistasSong){
+                    if (hashMapComArtistasESuasMusicas.get(artistaParaMusica.nome)!= null)
+                        musicas = hashMapComArtistasESuasMusicas.get(artistaParaMusica.nome);
+
+                    hashMapComArtistasESuasMusicas.put(artistaParaMusica.nome,musicas+1);
+                }
                 Song musicaNova = hashMapComMusicasFinal.get(idTemaMusical);
                 musicaNova.artistas = artistasSong;
                 hashMapComMusicasFinal.put(idTemaMusical,musicaNova);
+
             }
 
         } else {

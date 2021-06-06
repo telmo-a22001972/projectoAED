@@ -25,17 +25,15 @@ public class Main {
     public static ParseInfo parseInfoSongsDetailsTxTFinal = new ParseInfo(0, 0);
     public static HashMap<String, Song> hashMapComMusicasInicial = new HashMap<>();
     public static HashMap<String, Song> hashMapComMusicasFinal = new HashMap<>();
+    public static HashMap<String, Integer> hashMapComArtistasESuasMusicas = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
 
         loadFiles();
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
-        //System.out.println(hashMapComMusicasFinal.toString());
-        //System.out.println(Arrays.toString(songArtistsFinal.toArray()));
-        //System.out.println(getSongs().toString());
 
-        System.out.println(getSongs().size());
+        System.out.println(hashMapComMusicasFinal.get("3vNFsxBbA4dPkymPF5Jm1b").toString());
         Queries.menu();
 
     }
@@ -57,7 +55,6 @@ public class Main {
         long endArtists = System.currentTimeMillis();
         System.out.println("(took " + (endArtists - startArtists) + " ms)\n");
 
-        System.out.println(hashMapComMusicasFinal.get("0cS0A1fUEUd1EW3FcF8AEI").toString());
 
 
 
@@ -68,7 +65,6 @@ public class Main {
         long endDetails = System.currentTimeMillis();
         System.out.println("(took " + (endDetails - startDetails) + " ms)\n");
 
-        //System.out.println(hashMapComMusicasFinal.get("0cS0A1fUEUd1EW3FcF8AEI").toString());
 
     }
 
@@ -135,4 +131,9 @@ public class Main {
         return "TEMP";
     }
 
+    public static void fazerOtoString(){
+        for (int i =0; i < songsTxtFinal.size(); i++){
+            Song.fazerToString(songsTxtFinal.get(i));
+        }
+    }
 }

@@ -35,8 +35,22 @@ public class TestXXX {
     }
 
     @Test
-    public void testeSepararArtistas() throws IOException {
+    public void contarNumeroMusicasDoArtista() throws IOException {
+        Main.loadFiles();
+        Assert.assertEquals(10,Artista.numeroMusicasDoArtista("White Lion"));
+    }
 
+    @Test
+    public void getSongsFicheiroPequeno() throws  IOException {
+        Main.loadFiles();
+        Assert.assertEquals(1, Main.songsTxtFinal.size());
+    }
+
+    @Test
+    public void toStringSimpleFile() throws  IOException {
+        Main.loadFiles();
+
+        Assert.assertEquals("3vNFsxBbA4dPkymPF5Jm1b | This Mess We're In | 2000 | 3:55 | 62.0 | PJ Harvey / Thom Yorke | (1 / 4)", Main.hashMapComMusicasFinal.get("3vNFsxBbA4dPkymPF5Jm1b").toString());
     }
 
 
