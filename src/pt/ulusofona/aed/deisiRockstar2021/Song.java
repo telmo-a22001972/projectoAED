@@ -1,9 +1,6 @@
 package pt.ulusofona.aed.deisiRockstar2021;
 
 
-import java.util.Arrays;
-import java.util.function.IntToDoubleFunction;
-
 public class Song {
     String id;
     String titulo;
@@ -18,6 +15,8 @@ public class Song {
     Boolean detalhesAdicionados;
     String nMusicas;
     String toString;
+    Boolean temArtistas = false;
+    int posicaoDaMusica;
 
     Song(String ID, String Titulo, Artista[] Artista, int AnoLancamento, int duracaoDoTema, boolean letraExplicita,
          int popularidade, double dancabilidade, double vivacidade, double volumeMedio){
@@ -73,10 +72,10 @@ public class Song {
         int nMusicas = 0;
         String nMusicasString = "";
         if (musica.artistas != null) {
-            nMusicasString = String.valueOf(Main.hashMapComArtistasESuasMusicas.get(musica.artistas[0].nome));
+            nMusicasString = String.valueOf(Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[0].nome));
 
             for (int i = 1; i < musica.artistas.length; i++) {
-                nMusicas = Main.hashMapComArtistasESuasMusicas.get(musica.artistas[i].nome);
+                nMusicas = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome);
                 nMusicasString += " / " + String.valueOf(nMusicas);
             }
         }
@@ -105,7 +104,7 @@ public class Song {
         if (musica.artistas != null) {
             int[] nMusicas = new int[musica.artistas.length];
             for (int k = 0; k < nMusicas.length; k++) {
-                nMusicas[k] = Main.hashMapComArtistasESuasMusicas.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
+                nMusicas[k] = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
             }
             for (int u = 0; u < musica.artistas.length; u++) {
                 musica.artistas[u].numeroDeMusicas = nMusicas[u];

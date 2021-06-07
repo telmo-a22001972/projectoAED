@@ -25,7 +25,8 @@ public class Main {
     public static ParseInfo parseInfoSongsDetailsTxTFinal = new ParseInfo(0, 0);
     public static HashMap<String, Song> hashMapComMusicasInicial = new HashMap<>();
     public static HashMap<String, Song> hashMapComMusicasFinal = new HashMap<>();
-    public static HashMap<String, Integer> hashMapComArtistasESuasMusicas = new HashMap<>();
+    public static HashMap<String, Integer> hashMapComArtistasESuasMusicasInicial = new HashMap<>();
+    public static HashMap<String, Integer> hashMapComArtistasESuasMusicasFinal = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
 
@@ -33,8 +34,10 @@ public class Main {
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
-        System.out.println(hashMapComMusicasFinal.get("3vNFsxBbA4dPkymPF5Jm1b").toString());
+
+
         Queries.menu();
+
 
     }
 
