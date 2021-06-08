@@ -1,10 +1,7 @@
 
 package pt.ulusofona.aed.deisiRockstar2021;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.ArrayList;
+import java.util.*;
 
 import static pt.ulusofona.aed.deisiRockstar2021.Queries.*;
 
@@ -27,15 +24,18 @@ public class Main {
     public static HashMap<String, Song> hashMapComMusicasFinal = new HashMap<>();
     public static HashMap<String, Integer> hashMapComArtistasESuasMusicasInicial = new HashMap<>();
     public static HashMap<String, Integer> hashMapComArtistasESuasMusicasFinal = new HashMap<>();
-
+    public static HashSet<String> hashSetComTodosOsArtistas = new HashSet<>();
+    public static HashMap<String, ArrayList<String>> artistasESuasTags = new HashMap<>();
+    public static HashMap<String, ArrayList<String>> tagsESeusArtistas = new HashMap<>();
     public static void main(String[] args) throws IOException {
 
         loadFiles();
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
+        //System.out.println(parseInfoSongsArtistsTxTFinal.toString());
 
-
+        //System.out.println(hashSetComTodosOsArtistas.toString());
         Queries.menu();
 
 
@@ -76,13 +76,13 @@ public class Main {
     }
 
     public static ParseInfo getParseInfo(String fileName) {
-        if (Objects.equals(fileName, "songs.txt")) {
+        if (fileName.equals("songs.txt")) {
             return parseInfoSongsTxTFinal;
         }
-        if (Objects.equals(fileName, "song_artists.txt")) {
+        if (fileName.equals("song_artists.txt")) {
             return parseInfoSongsArtistsTxTFinal;
         }
-        if (Objects.equals(fileName, "song_details.txt")) {
+        if (fileName.equals("song_details.txt")) {
             return parseInfoSongsDetailsTxTFinal;
         }
         return null;
@@ -92,24 +92,35 @@ public class Main {
 
         String[] comando = command.split(" ");
         String accao = comando[0];
-        int numero = Integer.parseInt(comando[1]);
+
 
 
 
         switch (accao){
             case "COUNT_SONGS_YEAR" :
+                int numero = Integer.parseInt(comando[1]);
                 String numeroMusicas = getSongsYear(numero);
                 return numeroMusicas;
 
             case "COUNT_DUPLICATE_SONGS_YEAR" :
+                int numero2 = Integer.parseInt(comando[1]);
                 //VER O FICHEIRO TESTESTRING! !!!!!
-                String musicasRepetidas = getDuplicateSongsYear(numero);
+                String musicasRepetidas = getDuplicateSongsYear(numero2);
                 return musicasRepetidas;
 
             case "GET_ARTISTS_FOR_TAG" :
                 //USAR HAASHMAP OU HASHSET , NO ADD TAGS CRIAR UM ARRAYLIST COM OS ARTISTAS
                 //E ATRIBUIR ESSE ARRAYLIST AO NOME DA TAG NUM HASHMAP OU HASHSET
                 //NA GET ARTISTS FOR TAG -> FAZER UMA FUNÇÃO EM QUE DÁ RETURN NO ARRAYLIST DESSA TAG
+                return artistsForTag(comando[1]);
+
+            case "ADD_TAGS" :
+                //PROBLEMA COM ARTISTAS QUE TÊM ESPAÇOS NO NOME
+                String resultado = addTags(comando[1]);
+                return resultado;
+
+            case "REMOVE_TAGS" :
+                return removerTags(comando[1]);
 
 
 

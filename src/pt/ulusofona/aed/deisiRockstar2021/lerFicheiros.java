@@ -36,7 +36,6 @@ public class lerFicheiros {
                     dadosFinais[count] = dados[count].trim();
                     if (dadosFinais[count].isEmpty()){
                         parseInfoSongsTxT.numLinhasIgnored += 1;
-
                     }
                 }
 
@@ -273,25 +272,26 @@ public class lerFicheiros {
                     break;
             }
         }
-        Song musica = hashMapComMusicasFinal.get(idTemaMusical);
-        if (musica.detalhesAdicionados){
-            parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
-            return 0;
+        if (existeID(hashMapComMusicasFinal, idTemaMusical)) {
+            Song musica = hashMapComMusicasFinal.get(idTemaMusical);
+            if (musica.detalhesAdicionados) {
+                parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                return 0;
+            }
+
+
+            parseInfoSongsDetailsTxT.numLinhasOk += 1;
+            musica.duracaoDoTema = duracao;
+            musica.letraExplicita = boolLetraExplicita;
+            musica.popularidade = popularidade;
+            musica.dancabilidade = dancabilidade;
+            musica.vivacidade = vivacidade;
+            musica.volumeMedio = volumeMedio;
+            musica.detalhesAdicionados = true;
+            hashMapComMusicasFinal.put(idTemaMusical, musica);
+            songsTxtFinal.set(musica.posicaoDaMusica, musica);
+            Song.fazerToString(musica);
         }
-        parseInfoSongsDetailsTxT.numLinhasOk += 1;
-        musica.duracaoDoTema = duracao;
-        musica.letraExplicita = boolLetraExplicita;
-        musica.popularidade = popularidade;
-        musica.dancabilidade = dancabilidade;
-        musica.vivacidade = vivacidade;
-        musica.volumeMedio = volumeMedio;
-        musica.detalhesAdicionados = true;
-        hashMapComMusicasFinal.put(idTemaMusical,musica);
-        songsTxt.set(musica.posicaoDaMusica, musica);
-
-
-        Song.fazerToString(musica);
-
 
         return 0;
     }
@@ -401,6 +401,7 @@ public class lerFicheiros {
             for (int count = 0; count < artistasTrim.length; count++){
                 //Cria array de artistas
                 artistasSong[count] = new Artista(idTemaMusical, artistasTrim[count]);
+                hashSetComTodosOsArtistas.add(artistasTrim[count]);
 
             }
             if (existeID(hashMapComMusicasFinal, idTemaMusical)){

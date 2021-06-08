@@ -53,5 +53,12 @@ public class TestXXX {
         Assert.assertEquals("3vNFsxBbA4dPkymPF5Jm1b | This Mess We're In | 2000 | 3:55 | 62.0 | PJ Harvey / Thom Yorke | (1 / 4)", Main.hashMapComMusicasFinal.get("3vNFsxBbA4dPkymPF5Jm1b").toString());
     }
 
+    @Test
+    public void testParseInfoArtists() throws  IOException {
+        Main.loadFiles();
+        Main.loadFiles();
+        Assert.assertEquals("OK: 2, Ignored: 4", Main.getParseInfo("song_artists.txt").toString());
+    }
+
 
 }
