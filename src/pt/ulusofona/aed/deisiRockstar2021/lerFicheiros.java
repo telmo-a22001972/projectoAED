@@ -100,10 +100,7 @@ public class lerFicheiros {
 
                 boolean existeID = existeID(hashMapComMusicasFinal, idTemaMusical);
 
-                if (idTemaMusical.isEmpty() && artista.isEmpty()){
-                    parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
-                    continue;
-                }
+
                 if (idTemaMusical.isEmpty()){
                     parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
                     continue;
@@ -344,11 +341,13 @@ public class lerFicheiros {
 
         boolean artistaVazio = false;
 
+        //Vê se a música já tem artistas
+        //if (hashMapComMusicasFinal.get(idTemaMusical).temArtistas){
+        //
+        //    parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
+        //    return 0;
+        //}
 
-        if (hashMapComMusicasFinal.get(idTemaMusical).temArtistas){
-            parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
-            return 0;
-        }
         //Aqui vai ser feito o trim dos artistas 1 a 1
         for (int i = 0; i < artistasTrim.length; i++){
             artistasTrim[i] = arrayArtistas[i].trim();

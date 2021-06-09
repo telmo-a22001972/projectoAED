@@ -90,10 +90,8 @@ public class Main {
 
     public static String execute(String command) {
 
-        String[] comando = command.split(" ");
+        String[] comando = command.split(" ", 2);
         String accao = comando[0];
-
-
 
 
         switch (accao){
