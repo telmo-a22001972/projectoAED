@@ -120,7 +120,9 @@ public class Main {
             case "REMOVE_TAGS" :
                 return removerTags(comando[1]);
 
-
+            case "GET_MOST_DANCEABLE" :
+                String[] dados = comando[1].split(" ");
+                return getMostDanceable(Integer.parseInt(dados[0]),Integer.parseInt(dados[1]),Integer.parseInt(dados[2]));
 
             default:
                 return "Illegal command. Try again";
@@ -143,9 +145,4 @@ public class Main {
         return "TEMP";
     }
 
-    public static void fazerOtoString(){
-        for (int i =0; i < songsTxtFinal.size(); i++){
-            Song.fazerToString(songsTxtFinal.get(i));
-        }
-    }
 }

@@ -116,5 +116,10 @@ public class Song {
         musica.toString = toString;
     }
 
+    public String toStringDancabilidade(){
+
+        return titulo + " : " + anoLancamento + " : " + dancabilidade;
+    }
+
 
 }

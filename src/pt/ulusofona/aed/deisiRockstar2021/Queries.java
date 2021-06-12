@@ -17,6 +17,7 @@ public class Queries {
             long end = System.currentTimeMillis();
             System.out.println(result);
             System.out.println("(took " + (end - start) + " ms)\n");
+            //System.out.println(tagsESeusArtistas.toString());
             line = in.nextLine();
 
         }
@@ -81,32 +82,30 @@ public class Queries {
         if (!artistasESuasTags.containsKey(artista)) {
             //Vê se existe artista
             if (hashSetComTodosOsArtistas.contains(artista)) {
-
                 //Adiciona tags dadas no arrayList que se criou novo
                 for (int count = 1; count <= nTagsDadas; count++) {
                     tags.add(dados[count].toUpperCase());
+
+                    //                  A PARTIR DAQUI É O GET_ARTISTS_FOR_TAG - POR ISSO PODE BAZAR DAQUI
+                    //Primeira vez que se adiciona artistas a esta tag
+                    if (!tagsESeusArtistas.containsKey(dados[count])){
+                        //Adiciona à BD as tags com o artista
+                        tagsESeusArtistas.put(dados[count].toUpperCase(), artistaParaTagPrimeiraVez);
+
+                    //Não é a primeira vez que se mete artistas a esta tag
+                    }else {
+                        ArrayList<String> artistasDaTag = new ArrayList<>();
+                        artistasDaTag = tagsESeusArtistas.get(dados[count].toUpperCase());
+                        if (!artistasDaTag.contains(artista)){
+                            artistasDaTag.add(artista);
+                        }
+                        tagsESeusArtistas.put(dados[count].toUpperCase(),artistasDaTag);
+                        artistasDaTag.clear();
+                    }
                 }
                 //Mete na BD
                 artistasESuasTags.put(artista, tags);
 
-                //                  A PARTIR DAQUI É O GET_ARTISTS_FOR_TAG - POR ISSO PODE BAZAR DAQUI
-                //Primeira vez que se adiciona artistas a esta tag
-                for (int contagem = 1; contagem <= nTagsDadas; contagem++) {
-                    //Vou mer upperCase
-                    if (!tagsESeusArtistas.containsKey(dados[contagem].toUpperCase())) {
-                        //Adiciona à BD as tags com o artista
-                        tagsESeusArtistas.put(dados[contagem].toUpperCase(), artistaParaTagPrimeiraVez);
-
-                        //Não é a primeira vez que se mete artistas a esta tag
-                    } else {
-                        ArrayList<String> artistasDaTag = tagsESeusArtistas.get(dados[contagem].toUpperCase());
-                        if (!artistasDaTag.contains(artista)) {
-                            artistasDaTag.add(artista);
-                        }
-                        tagsESeusArtistas.put(dados[contagem].toUpperCase(), artistasDaTag);
-
-                    }
-                }
                 //Vai fazer a string <ARTISTA> | TAG | TAG
                 return outputAddTags(artista);
             }
@@ -120,30 +119,25 @@ public class Queries {
             for (int count = 1; count <= nTagsDadas; count++){
                 //Como não pode ter tags repetidas
                 //Vai verificar se ela já foram adicionadas
-                if (!tagsExistentes.contains(dados[count].toUpperCase())){
+                if (!tagsExistentes.contains(dados[count])){
                     //Senão adiciona aos arraylist
                     tagsExistentes.add(dados[count].toUpperCase());
                 }
 
+                if (!tagsESeusArtistas.containsKey(dados[count].toUpperCase())){
+                    tagsESeusArtistas.put(dados[count].toUpperCase(), artistaParaTagSegundaVez);
+                }else {
+                    ArrayList<String> artistasDaTag = tagsESeusArtistas.get(dados[count].toUpperCase());
+                    if (!artistasDaTag.contains(artista)){
+                        artistasDaTag.add(artista);
+                    }
+                    tagsESeusArtistas.put(dados[count].toUpperCase(),artistasDaTag);
+                    artistasDaTag.clear();
+                }
             }
             //Atualiza a BD agora com as tags adicionadas
             artistasESuasTags.put(artista, tagsExistentes);
 
-            for (int contagem = 1; contagem <= nTagsDadas; contagem++) {
-                if (!tagsESeusArtistas.containsKey(dados[contagem].toUpperCase())) {
-                    //Adiciona à BD as tags com o artista
-                    tagsESeusArtistas.put(dados[contagem].toUpperCase(), artistaParaTagPrimeiraVez);
-
-                    //Não é a primeira vez que se mete artistas a esta tag
-                } else {
-                    ArrayList<String> artistasDaTag = tagsESeusArtistas.get(dados[contagem].toUpperCase());
-                    if (!artistasDaTag.contains(artista)) {
-                        artistasDaTag.add(artista);
-                    }
-                    tagsESeusArtistas.put(dados[contagem].toUpperCase(), artistasDaTag);
-
-                }
-            }
             //Faz a string <ARTISTA> | TAG | TAG
             return outputAddTags(artista);
         }
@@ -151,7 +145,7 @@ public class Queries {
     }
 
     public static String outputAddTags(String artista){
-        String output = artista;
+        StringBuilder output = new StringBuilder(artista);
         ArrayList<String> tags = artistasESuasTags.get(artista);
 
         if (tags.size() == 0){
@@ -160,12 +154,12 @@ public class Queries {
 
         for (int i = 0; i < tags.size(); i++){
             if (i == 0) {
-                output += " | " + tags.get(i);
-            } else {
-                output += "," + tags.get(i);
+                output.append(" | ").append(tags.get(i));
+            }else {
+                output.append(",").append(tags.get(i));
             }
         }
-        return output;
+        return output.toString();
     }
 
     public static String removerTags(String tagsEArtista) {
@@ -189,27 +183,21 @@ public class Queries {
         artistasESuasTags.put(artista,tagsDoArtista);
 
         //Output
-        
         return outputAddTags(artista);
     }
 
     public static String artistsForTag(String tag){
 
-        if (tagsESeusArtistas.containsKey(tag)) {
-            if (tagsESeusArtistas.get(tag) != null) {
-                ArrayList<String> artistas = tagsESeusArtistas.get(tag);
-                String output;
-                if (!artistas.isEmpty()){
-                    output = artistas.get(0);
-                }else {
-                    return "No results";
-                }
+        if (tagsESeusArtistas.containsKey(tag.toUpperCase())) {
+            if (tagsESeusArtistas.get(tag.toUpperCase()) != null) {
+                ArrayList<String> artistas = tagsESeusArtistas.get(tag.toUpperCase());
+                String output = artistas.get(0);
 
                 if (artistas.size() == 1) {
                     return output;
                 }
 
-                for (int i = 1; i < artistas.size(); i++){
+                for (int i = 0; i <= artistas.size(); i++){
                     output += ";"+ artistas.get(i);
                 }
                 return output;
@@ -221,4 +209,23 @@ public class Queries {
         return "No results";
 
     }
+
+    public static String getMostDanceable(int anoX, int anoY, int N) {
+        StringBuilder dancabilidade = new StringBuilder();
+        ArrayList<Song> listaDeMusicas = new ArrayList<>();
+        int count;
+
+        for (count = 0; count < songsTxtFinal.size(); count++) {
+            if (songsTxtFinal.get(count).anoLancamento >= anoX && songsTxtFinal.get(count).anoLancamento <= anoY) {
+                listaDeMusicas.add(songsTxtFinal.get(count));
+            }
+        }
+        listaDeMusicas.sort(Comparator.comparing((Song musica) -> musica.dancabilidade).reversed());
+        for (count = 0; count < N; count++) {
+            dancabilidade.append(listaDeMusicas.get(count).toStringDancabilidade()).append("\n");
+        }
+        return dancabilidade.toString();
+    }
+
+
 }
