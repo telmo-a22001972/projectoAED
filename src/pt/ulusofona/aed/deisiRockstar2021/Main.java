@@ -1,5 +1,6 @@
 
 package pt.ulusofona.aed.deisiRockstar2021;
+import javax.management.monitor.StringMonitor;
 import java.io.IOException;
 import java.util.*;
 
@@ -27,15 +28,15 @@ public class Main {
     public static HashSet<String> hashSetComTodosOsArtistas = new HashSet<>();
     public static HashMap<String, ArrayList<String>> artistasESuasTags = new HashMap<>();
     public static HashMap<String, ArrayList<String>> tagsESeusArtistas = new HashMap<>();
+
+
     public static void main(String[] args) throws IOException {
 
         loadFiles();
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
-        //System.out.println(parseInfoSongsArtistsTxTFinal.toString());
 
-        //System.out.println(hashSetComTodosOsArtistas.toString());
         Queries.menu();
 
 
@@ -102,18 +103,16 @@ public class Main {
 
             case "COUNT_DUPLICATE_SONGS_YEAR" :
                 int numero2 = Integer.parseInt(comando[1]);
-                //VER O FICHEIRO TESTESTRING! !!!!!
+
                 String musicasRepetidas = getDuplicateSongsYear(numero2);
                 return musicasRepetidas;
 
             case "GET_ARTISTS_FOR_TAG" :
-                //USAR HAASHMAP OU HASHSET , NO ADD TAGS CRIAR UM ARRAYLIST COM OS ARTISTAS
-                //E ATRIBUIR ESSE ARRAYLIST AO NOME DA TAG NUM HASHMAP OU HASHSET
-                //NA GET ARTISTS FOR TAG -> FAZER UMA FUNÇÃO EM QUE DÁ RETURN NO ARRAYLIST DESSA TAG
+
                 return artistsForTag(comando[1]);
 
             case "ADD_TAGS" :
-                //PROBLEMA COM ARTISTAS QUE TÊM ESPAÇOS NO NOME
+
                 String resultado = addTags(comando[1]);
                 return resultado;
 
@@ -124,6 +123,11 @@ public class Main {
                 String[] dados = comando[1].split(" ");
                 return getMostDanceable(Integer.parseInt(dados[0]),Integer.parseInt(dados[1]),Integer.parseInt(dados[2]));
 
+            case "GET_TOP_ARTISTS_WITH_SONGS_BETWEEN" :
+                return getTopArtistsInBetween(comando[1]);
+
+            case "GET_ARTISTS_ONE_SONG" :
+                return getArtistsOneSong(comando[1]);
             default:
                 return "Illegal command. Try again";
         }

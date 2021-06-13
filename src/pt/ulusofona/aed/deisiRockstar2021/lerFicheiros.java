@@ -397,6 +397,7 @@ public class lerFicheiros {
 
         if (!artistaVazio) {
 
+
             for (int count = 0; count < artistasTrim.length; count++){
                 //Cria array de artistas
                 artistasSong[count] = new Artista(idTemaMusical, artistasTrim[count]);
@@ -404,6 +405,7 @@ public class lerFicheiros {
 
             }
             if (existeID(hashMapComMusicasFinal, idTemaMusical)){
+
                 parseInfoSongsArtistsTxT.numLinhasOk += 1;
 
                 //Aumenta o número de músicas a cada artista
