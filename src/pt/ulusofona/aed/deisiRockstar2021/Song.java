@@ -58,10 +58,12 @@ public class Song {
             nomesArtistas = artistas[0].nome;
 
             for (int k = 1; k < artistas.length; k++) {
-                if (!artistas[k].nome.isEmpty()) {
-                    nomesArtistas += (" / " + artistas[k].nome);
-                } else {
+                if (artistas[k] != null) {
+                    if (!artistas[k].nome.isEmpty()) {
+                        nomesArtistas += (" / " + artistas[k].nome);
+                    } else {
 
+                    }
                 }
             }
         }
@@ -75,8 +77,10 @@ public class Song {
             nMusicasString = String.valueOf(Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[0].nome));
 
             for (int i = 1; i < musica.artistas.length; i++) {
-                nMusicas = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome);
-                nMusicasString += " / " + String.valueOf(nMusicas);
+                if (musica.artistas[i] != null) {
+                    nMusicas = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome);
+                    nMusicasString += " / " + String.valueOf(nMusicas);
+                }
             }
         }
         musica.nMusicas = nMusicasString;
@@ -104,10 +108,14 @@ public class Song {
         if (musica.artistas != null) {
             int[] nMusicas = new int[musica.artistas.length];
             for (int k = 0; k < nMusicas.length; k++) {
-                nMusicas[k] = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
+                if (musica.artistas[k] != null) {
+                    nMusicas[k] = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
+                }
             }
             for (int u = 0; u < musica.artistas.length; u++) {
-                musica.artistas[u].numeroDeMusicas = nMusicas[u];
+                if (musica.artistas[u] != null) {
+                    musica.artistas[u].numeroDeMusicas = nMusicas[u];
+                }
             }
         }
         meterNmusicasNaString(musica);

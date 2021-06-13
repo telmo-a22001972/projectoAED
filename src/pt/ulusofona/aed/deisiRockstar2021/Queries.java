@@ -265,10 +265,12 @@ public class Queries {
             Song musica = songsTxtFinal.get(count);
             if (musica.temArtistas) {
                 for (int i = 0; i < musica.artistas.length; i++) {
-                    if (musica.artistas[i].numeroDeMusicas >= A && musica.artistas[i].numeroDeMusicas <= B) {
-                        if (!nomesArtistas.contains(musica.artistas[i].nome)) {
-                            nomesArtistas.add(musica.artistas[i].nome);
-                            artistas.add(musica.artistas[i]);
+                    if (musica.artistas[i] != null) {
+                        if (musica.artistas[i].numeroDeMusicas >= A && musica.artistas[i].numeroDeMusicas <= B) {
+                            if (!nomesArtistas.contains(musica.artistas[i].nome)) {
+                                nomesArtistas.add(musica.artistas[i].nome);
+                                artistas.add(musica.artistas[i]);
+                            }
                         }
                     }
                 }
@@ -301,23 +303,34 @@ public class Queries {
         int anoIni = Integer.parseInt(dados[0]);
         int anoFim = Integer.parseInt(dados[1]);
         StringBuilder output = new StringBuilder();
+
         ArrayList<String> nomesArtistas = new ArrayList<>();
         HashMap<String, Song> artistaEMusica = new HashMap<>();
+        HashMap<String, Song> artistsEVariasMusicas = new HashMap<>();
 
         if (anoIni>=anoFim){
             return "Invalid period";
         }
 
         for (Song musica : songsTxtFinal) {
+
             if (musica.anoLancamento >= anoIni && musica.anoLancamento <= anoFim) {
+
                 if (musica.temArtistas) {
+
                     for (int i = 0; i < musica.artistas.length; i++) {
-                        if (hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome) == 1) {
-                            if (!nomesArtistas.contains(musica.artistas[i].nome)) {
-                                nomesArtistas.add(musica.artistas[i].nome);
+                        if (musica.artistas[i] != null) {
+                            if (!artistsEVariasMusicas.containsKey(musica.artistas[i].nome)) {
+                                artistsEVariasMusicas.put(musica.artistas[i].nome, musica);
                                 artistaEMusica.put(musica.artistas[i].nome, musica);
+                                nomesArtistas.add(musica.artistas[i].nome);
+                            } else {
+                                artistaEMusica.remove(musica.artistas[i].nome);
+                                nomesArtistas.remove(musica.artistas[i].nome);
                             }
                         }
+
+
                     }
                 }
             }
@@ -330,5 +343,72 @@ public class Queries {
             }
         }
         return output.toString();
+    }
+
+    public static String getYearHighDurationMusic(String input){
+        String[] dados = input.split(" ");
+        int ano = Integer.parseInt(dados[0]);
+        int duracao = Integer.parseInt(dados[1]);
+        ArrayList<Song> musicasPedidas = new ArrayList<>();
+
+        for (Song musica : songsTxtFinal){
+            if (musica.anoLancamento == ano && (musica.duracaoDoTema/1000) / 60 >= duracao)
+                musicasPedidas.add(musica);
+        }
+
+        if (musicasPedidas.size() == 0){
+            return "No results";
+        }
+        musicasPedidas.sort(Comparator.comparing((Song musica) -> musica.duracaoDoTema).reversed());
+
+        StringBuilder output = new StringBuilder();
+        for (int k = 0; k < musicasPedidas.size(); k++){
+            String duracaoOuPut = String.valueOf((musicasPedidas.get(k).duracaoDoTema /1000)/60);
+            duracaoOuPut += ":"+ ((musicasPedidas.get(k).duracaoDoTema /1000)%60);
+            output.append(musicasPedidas.get(k).titulo).append(" | ").append(duracaoOuPut).append("\n");
+        }
+        return output.toString();
+
+
+    }
+
+    public static String getUniqueTags(){
+        StringBuilder output = new StringBuilder();
+        for (String tag : tagsESeusArtistas.keySet()){
+
+        }
+        return "";
+    }
+
+    public static String cleanUp(){
+        int countMusicas = 0;
+        int countArtistas = 0;
+        for(int count = 0;count < songsTxtFinal.size(); count++){
+            Song musica = songsTxtFinal.get(count);
+            Artista artista2 = songArtistsFinal.get(count);
+            if (!musica.temArtistas){
+                for (int i = 0; i < musica.artistas.length; i++){
+                    musica.artistas[i].numeroDeMusicas--;
+                }
+                songsTxtFinal.remove(musica);
+                countMusicas++;
+            }
+            if (!musica.detalhesAdicionados){
+                for (int i = 0; i < musica.artistas.length; i++){
+                    musica.artistas[i].numeroDeMusicas--;
+                }
+                songsTxtFinal.remove(musica);
+                countMusicas++;
+            }
+        }
+        for(int count = 0;count < songArtistsFinal.size(); count++){
+            Artista artista = songArtistsFinal.get(count);
+            if (artista.numeroDeMusicas == 0){
+                songArtistsFinal.remove(artista);
+                hashSetComTodosOsArtistas.remove(artista.nome);
+                countArtistas++;
+            }
+        }
+        return "Musicas removidas: " + String.valueOf(countMusicas) + "\n" + "Artistas removidos: " + String.valueOf(countArtistas) + "\n";
     }
 }

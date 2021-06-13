@@ -2,6 +2,7 @@
 package pt.ulusofona.aed.deisiRockstar2021;
 import javax.management.monitor.StringMonitor;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 
 import static pt.ulusofona.aed.deisiRockstar2021.Queries.*;
@@ -128,20 +129,30 @@ public class Main {
 
             case "GET_ARTISTS_ONE_SONG" :
                 return getArtistsOneSong(comando[1]);
+
+            case "GET_YEAR_HIGHER_DURATION_MUSIC" :
+                return getYearHighDurationMusic(comando[1]);
+
+            case "GET_UNIQUE_TAGS" :
+                return getUniqueTags();
+
+            case "CLEANUP" :
+                return cleanUp();
+
             default:
                 return "Illegal command. Try again";
         }
 
     }
 
-    public static String getCreativeQuery()
-    {
-        return "TEMP";
+    public static String getCreativeQuery(){
+
+        return "GET_YEAR_HIGHER_DURATION_MUSIC";
     }
 
     public static int getTypeOfSecondParameter()
     {
-        return 0;
+        return 1;
     }
 
     public static String getVideoUrl()

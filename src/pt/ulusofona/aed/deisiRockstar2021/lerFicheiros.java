@@ -111,6 +111,10 @@ public class lerFicheiros {
                     continue;
                 }
 
+                if (hashMapComMusicasFinal.get(idTemaMusical).temArtistas){
+                    parseInfoSongsArtistsTxT.numLinhasOk += 1;
+                    continue;
+                }
 
                 separarArtistas(artista,idTemaMusical);
 
@@ -341,12 +345,6 @@ public class lerFicheiros {
 
         boolean artistaVazio = false;
 
-        //Vê se a música já tem artistas
-        //if (hashMapComMusicasFinal.get(idTemaMusical).temArtistas){
-        //
-        //    parseInfoSongsArtistsTxT.numLinhasIgnored += 1;
-        //    return 0;
-        //}
 
         //Aqui vai ser feito o trim dos artistas 1 a 1
         for (int i = 0; i < artistasTrim.length; i++){
@@ -396,13 +394,12 @@ public class lerFicheiros {
         //E se tal acontecer então não utiliza a linha
 
         if (!artistaVazio) {
+            String[] artistasFinais = veSeHaArtistasRepetidosNaMusica(artistasTrim);
 
-
-            for (int count = 0; count < artistasTrim.length; count++){
+            for (int count = 0; count < artistasFinais.length; count++){
                 //Cria array de artistas
-                artistasSong[count] = new Artista(idTemaMusical, artistasTrim[count]);
-                hashSetComTodosOsArtistas.add(artistasTrim[count]);
-
+                    artistasSong[count] = new Artista(idTemaMusical, artistasFinais[count]);
+                    hashSetComTodosOsArtistas.add(artistasFinais[count]);
             }
             if (existeID(hashMapComMusicasFinal, idTemaMusical)){
 
@@ -410,10 +407,12 @@ public class lerFicheiros {
 
                 //Aumenta o número de músicas a cada artista
                 for (Artista artistaParaMusica : artistasSong){
-                    if (hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome)!= null)
-                        musicas = hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome);
-                    //Mete a música no hashMapDosArtistas, com o nº de músicas atualizado
-                    hashMapComArtistasESuasMusicasInicial.put(artistaParaMusica.nome,musicas+1);
+                    if (artistaParaMusica != null) {
+                        if (hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome) != null)
+                            musicas = hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome);
+                        //Mete a música no hashMapDosArtistas, com o nº de músicas atualizado
+                        hashMapComArtistasESuasMusicasInicial.put(artistaParaMusica.nome, musicas + 1);
+                    }
                 }
                 Song musicaNova = hashMapComMusicasFinal.get(idTemaMusical);
                 musicaNova.artistas = artistasSong;
@@ -440,6 +439,20 @@ public class lerFicheiros {
         return false;
     }
 
+    public static String[] veSeHaArtistasRepetidosNaMusica(String[] arrayArtistas){
+        int count = 0;
+        TreeSet<String> artistas = new TreeSet<>(Arrays.asList(arrayArtistas));
+
+        String[] artistasFinais = new String[artistas.size()];
+
+
+        for (String artista : artistas){
+            artistasFinais[count] = artista;
+            count++;
+        }
+
+        return artistasFinais;
+    }
 
 
 
