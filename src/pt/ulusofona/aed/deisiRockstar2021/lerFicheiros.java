@@ -231,9 +231,14 @@ public class lerFicheiros {
                 case 2:
                     if (numeroInteiro(dados[i])) {
                         letraExplicita = Integer.parseInt(dados[i]);
-                        if (letraExplicita == 1)
+                        if (letraExplicita == 1) {
                             boolLetraExplicita = true;
-
+                        }else if (letraExplicita == 0) {
+                            boolLetraExplicita = false;
+                        }else {
+                            parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
+                            return 0;
+                        }
                     } else {
                         parseInfoSongsDetailsTxT.numLinhasIgnored += 1;
                         return 0;
@@ -362,7 +367,7 @@ public class lerFicheiros {
                 break;
             }
             //Vai remover os caracteres do ínicio que sejam ([, ' , ")
-            while (artistasTrim[u].startsWith("[")|| artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39 || artistasTrim[u].charAt(0) == ' '){
+            while (artistasTrim[u].charAt(0) == '[' || artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39 || artistasTrim[u].charAt(0) == ' '){
                 //Elimina o caracter
                 artistasTrim[u] = artistasTrim[u].substring(1);
 

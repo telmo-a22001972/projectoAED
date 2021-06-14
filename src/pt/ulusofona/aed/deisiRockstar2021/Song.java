@@ -52,7 +52,7 @@ public class Song {
     public static String obterNomeArtistas(Artista[] artistas){
         String nomesArtistas;
         if (artistas == null){
-            return "null";
+            return "";
         }else {
 
             nomesArtistas = artistas[0].nome;

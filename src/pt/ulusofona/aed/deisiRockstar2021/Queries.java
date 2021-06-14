@@ -281,7 +281,7 @@ public class Queries {
         }
         artistas.sort(Comparator.comparing((Artista artista) -> artista.numeroDeMusicas).reversed());
 
-        if (artistas.size()-1 < numeroArtistas){
+        if (artistas.size() < numeroArtistas){
             StringBuilder output = new StringBuilder();
             for (int k = 0; k < artistas.size(); k++){
                 output.append(artistas.get(k).nome).append(" ").append(artistas.get(k).numeroDeMusicas).append("\n");
@@ -374,41 +374,116 @@ public class Queries {
 
     public static String getUniqueTags(){
         StringBuilder output = new StringBuilder();
+        ArrayList<Tag> tags = new ArrayList<>();
         for (String tag : tagsESeusArtistas.keySet()){
+            int tamanhoArray = tagsESeusArtistas.get(tag).size();
+            tags.add(new Tag(tag,tamanhoArray));
+        }
+        tags.sort(Comparator.comparing((Tag tag) -> tag.numeroVezesUsada));
+        for (int count = 0; count < tags.size(); count++){
+            output.append(tags.get(count).tag).append(" ").append(tags.get(count).numeroVezesUsada).append("\n");
+        }
+        return output.toString();
+    }
+
+    public static String getUniqueTagsBetweenYear(String input){
+        String[] dados = input.split(" ");
+        int anoInit = Integer.parseInt(dados[0]);
+        int anoFim = Integer.parseInt(dados[1]);
+
+        StringBuilder output = new StringBuilder();
+        ArrayList<Tag> tags = new ArrayList<>();
+        boolean encontrou = true;
+        /*
+               Vamos ver fazer de tag a tag
+         */
+        for (String tag : tagsESeusArtistas.keySet()){
+            /*
+                Vamos buscar o ArrayList dessa tag
+             */
+            ArrayList<String> artistas = tagsESeusArtistas.get(tag);
+            encontrou = true;
+            /*
+                 Vamos de musica em musica ver se algum dos seus artista é igual a algum artista da tag
+             */
+            for (int posicao = 0; posicao < songsTxtFinal.size() && encontrou; posicao++){
+                /*
+                    Primeiro vemos se o ano da musica está entre os anos pedidos
+                 */
+                if (songsTxtFinal.get(posicao).anoLancamento >= anoInit && songsTxtFinal.get(posicao).anoLancamento <= anoFim){
+                    /*
+                        Vemos se a música tem artistas
+                     */
+                    if (songsTxtFinal.get(posicao).artistas != null) {
+                        /*
+                            Vamos ver a cada artista da musica se é igual a algum dos artistas da tag
+                         */
+                        for (int k = 0; k < songsTxtFinal.get(posicao).artistas.length && encontrou; k++) {
+                            /*
+                                Vai comparar o artista da musica com todos os artistas da tag
+                             */
+                            for (int u = 0; u < artistas.size() && encontrou; u++) {
+                                if (artistas.get(u).equals(songsTxtFinal.get(posicao).artistas[k].nome)) {
+                                    if (!tags.contains(new Tag(tag, artistas.size()))) {
+                                        tags.add(new Tag(tag, artistas.size()));
+                                        encontrou = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
         }
-        return "";
+        if (tags.size() == 0){
+            return "No results";
+        }
+        tags.sort(Comparator.comparing((Tag tag) -> tag.numeroVezesUsada).reversed());
+        for (int count = 0; count < tags.size(); count++){
+            output.append(tags.get(count).tag).append(" ").append(tags.get(count).numeroVezesUsada).append("\n");
+        }
+        return output.toString();
     }
 
     public static String cleanUp(){
         int countMusicas = 0;
         int countArtistas = 0;
+        Set<String> artistas = hashMapComArtistasESuasMusicasFinal.keySet();
+        ArrayList<String> artistasParaRemover = new ArrayList<>();
+
         for(int count = 0;count < songsTxtFinal.size(); count++){
             Song musica = songsTxtFinal.get(count);
-            Artista artista2 = songArtistsFinal.get(count);
             if (!musica.temArtistas){
-                for (int i = 0; i < musica.artistas.length; i++){
-                    musica.artistas[i].numeroDeMusicas--;
-                }
                 songsTxtFinal.remove(musica);
                 countMusicas++;
             }
             if (!musica.detalhesAdicionados){
-                for (int i = 0; i < musica.artistas.length; i++){
-                    musica.artistas[i].numeroDeMusicas--;
+               if (musica.artistas != null) {
+                    for (int i = 0; i < musica.artistas.length; i++) {
+                        int numMusicasArtistas = hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome) - 1;
+                        hashMapComArtistasESuasMusicasFinal.put(musica.artistas[i].nome, numMusicasArtistas);
+                        musica.artistas[i].numeroDeMusicas--;
+
+                    }
                 }
                 songsTxtFinal.remove(musica);
                 countMusicas++;
+
             }
         }
-        for(int count = 0;count < songArtistsFinal.size(); count++){
-            Artista artista = songArtistsFinal.get(count);
-            if (artista.numeroDeMusicas == 0){
-                songArtistsFinal.remove(artista);
-                hashSetComTodosOsArtistas.remove(artista.nome);
+        for(String artista : artistas){
+            int nMusicas = hashMapComArtistasESuasMusicasFinal.get(artista);
+            if (nMusicas == 0){
+                artistasParaRemover.add(artista);
                 countArtistas++;
             }
         }
-        return "Musicas removidas: " + String.valueOf(countMusicas) + "\n" + "Artistas removidos: " + String.valueOf(countArtistas) + "\n";
+        for (String artista : artistasParaRemover){
+            hashSetComTodosOsArtistas.remove(artista);
+            hashMapComArtistasESuasMusicasFinal.remove(artista);
+        }
+
+        return "Musicas removidas: " + (countMusicas) + "; " + "Artistas removidos: " + (countArtistas) + "\n";
     }
 }

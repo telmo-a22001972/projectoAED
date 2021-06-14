@@ -139,6 +139,8 @@ public class Main {
             case "CLEANUP" :
                 return cleanUp();
 
+            case "GET_UNIQUE_TAGS_IN_BETWEEN_YEARS" :
+                return getUniqueTagsBetweenYear(comando[1]);
             default:
                 return "Illegal command. Try again";
         }
