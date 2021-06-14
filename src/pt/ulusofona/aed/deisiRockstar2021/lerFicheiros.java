@@ -15,11 +15,11 @@ public class lerFicheiros {
     }
 
 
-    public static void lerSongs(){
+    public static void lerSongs(String filenameSongs){
         int posicao = 0;
         try {
             String linhaSongs = null;
-            FileReader fr = new FileReader("songs.txt");
+            FileReader fr = new FileReader(filenameSongs);
             BufferedReader reader = new BufferedReader(fr);
 
             while ((linhaSongs = reader.readLine()) != null) {
@@ -75,10 +75,10 @@ public class lerFicheiros {
     }
 
 
-    public static void lerSongsArtists() {
+    public static void lerSongsArtists(String filenameArtists) {
         try {
             String linha = null;
-            FileReader fr = new FileReader("song_artists.txt");
+            FileReader fr = new FileReader(filenameArtists);
             BufferedReader readerSongArtists = new BufferedReader(fr);
             while ((linha = readerSongArtists.readLine()) != null) {
 
@@ -139,13 +139,13 @@ public class lerFicheiros {
 
     }
 
-    public static void lerSongDetails() {
+    public static void lerSongDetails(String filenameDetails) {
         boolean linhaDup = false;
         boolean algoVazio = false;
         try {
             boolean letra = false;
             String linha= null;
-            FileReader fr = new FileReader("song_details.txt");
+            FileReader fr = new FileReader(filenameDetails);
             BufferedReader reader = new BufferedReader(fr);
             while ((linha = reader.readLine()) != null) {
 
@@ -346,6 +346,7 @@ public class lerFicheiros {
         //Aqui vão ficar os artistas depois do trim
         String[] artistasTrim = new String[arrayArtistas.length];
         Artista[] artistasSong = new Artista[arrayArtistas.length];
+        ArrayList<String> artistasQueTiverMusicasAumentado = new ArrayList<>();
         int musicas = 0;
 
         boolean artistaVazio = false;
@@ -366,31 +367,86 @@ public class lerFicheiros {
                 artistaVazio = true;
                 break;
             }
-            //Vai remover os caracteres do ínicio que sejam ([, ' , ")
-            while (artistasTrim[u].charAt(0) == '[' || artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39 || artistasTrim[u].charAt(0) == ' '){
-                //Elimina o caracter
-                artistasTrim[u] = artistasTrim[u].substring(1);
 
-                //Vê o tamanho da string para não eliminar o caracter de uma string vazia
-                if (artistasTrim[u].isEmpty()) {
-                    //Este artistaVazio vai ser usado para saber se se utiliza a linha ou não
-                    artistaVazio = true;
-                    break;
+            if (u == 0) {
+                //Vai remover os caracteres do ínicio que sejam ([, ' , ")
+                while (artistasTrim[u].charAt(0) == '"' || artistasTrim[u].charAt(0) == 39 || artistasTrim[u].charAt(0) == ' ') {
+                    //Elimina o caracter
+                    artistasTrim[u] = artistasTrim[u].substring(1);
+
+                    //Vê o tamanho da string para não eliminar o caracter de uma string vazia
+                    if (artistasTrim[u].isEmpty()) {
+                        //Este artistaVazio vai ser usado para saber se se utiliza a linha ou não
+                        artistaVazio = true;
+                        break;
+                    }
+
+                }
+            }
+            if (u != 0 || artistasTrim.length == 1) {
+                //Vai remover caracteres desnecessários no final a string dos artistas
+                if (!artistasTrim[u].isEmpty()) {
+                    //Só entra se a string não for vazia para não dar cras
+                    while (artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 39 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 34 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == ' ') {
+                        artistasTrim[u] = artistasTrim[u].substring(0, artistasTrim[u].length() - 1);
+                        if (artistasTrim[u].isEmpty()) {
+                            artistaVazio = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            //Remover o "["
+            if (!artistasTrim[u].isEmpty())
+                if (artistasTrim[u].charAt(0) == 91) {
+                    artistasTrim[u] = artistasTrim[u].substring(1);
+                    if (artistasTrim[u].isEmpty()) {
+                        artistaVazio = true;
+                        break;
+                    }
+                }
+            //Remover o "]"
+            if (!artistasTrim[u].isEmpty())
+                if (artistasTrim[u].charAt(artistasTrim[u].length()-1) == 93) {
+                    artistasTrim[u] = artistasTrim[u].substring(0, artistasTrim[u].length() - 1);
+                    if (artistasTrim[u].isEmpty()) {
+                        artistaVazio = true;
+                        break;
+                    }
                 }
 
-            }
-
-            //Vai remover caracteres desnecessários no final a string dos artistas
-            if (!artistasTrim[u].isEmpty()) {
-                //Só entra se a string não for vazia para não dar crash
-                while (artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 93 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 39 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == 34 || artistasTrim[u].charAt(artistasTrim[u].length() - 1) == ' ') {
+            //Vê se começa com plica e remove
+            if (!artistasTrim[u].isEmpty())
+                if (artistasTrim[u].charAt(0) == 39) {
+                    artistasTrim[u] = artistasTrim[u].substring(1);
+                    if (artistasTrim[u].isEmpty()) {
+                        artistaVazio = true;
+                        break;
+                    }
+                }
+            //Vê se acaba com plica e remove
+            if (!artistasTrim[u].isEmpty())
+                if (artistasTrim[u].charAt(artistasTrim[u].length()-1) == 39) {
                     artistasTrim[u] = artistasTrim[u].substring(0, artistasTrim[u].length() - 1);
+                    if (artistasTrim[u].isEmpty()) {
+                        artistaVazio = true;
+                        break;
+                    }
+                }
+            //Quando começa com duas aspas
+            if (!artistasTrim[u].isEmpty())
+                if (artistasTrim[u].charAt(0) == 34 && artistasTrim[u].charAt(0) == artistasTrim[u].charAt(1)) {
+                    artistasTrim[u] = artistasTrim[u].substring(2);
+                    if (artistasTrim[u].isEmpty()){
+                        artistaVazio = true;
+                        break;
+                    }
+                    artistasTrim[u] = artistasTrim[u].substring(0,artistasTrim[u].length()-2);
                     if (artistasTrim[u].isEmpty()){
                         artistaVazio = true;
                         break;
                     }
                 }
-            }
 
         }
 
@@ -413,16 +469,20 @@ public class lerFicheiros {
                 //Aumenta o número de músicas a cada artista
                 for (Artista artistaParaMusica : artistasSong){
                     if (artistaParaMusica != null) {
-                        if (hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome) != null)
+                        if (hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome) != null) {
                             musicas = hashMapComArtistasESuasMusicasInicial.get(artistaParaMusica.nome);
+
+                        }
                         //Mete a música no hashMapDosArtistas, com o nº de músicas atualizado
                         hashMapComArtistasESuasMusicasInicial.put(artistaParaMusica.nome, musicas + 1);
+                        musicas = 0;
                     }
                 }
                 Song musicaNova = hashMapComMusicasFinal.get(idTemaMusical);
                 musicaNova.artistas = artistasSong;
                 musicaNova.temArtistas = true;
                 hashMapComMusicasFinal.put(idTemaMusical,musicaNova);
+
                 return 0;
 
             }
@@ -460,5 +520,32 @@ public class lerFicheiros {
     }
 
 
+    public static String[] removerAspasEplicas(String[] artistas){
+        for (int count = 0; count < artistas.length; count++){
 
+            //Remover o "["
+            if (!artistas[count].isEmpty())
+                if (artistas[count].charAt(0) == 91)
+                    artistas[count] = artistas[count].substring(1);
+            //Remover o "]"
+            if (!artistas[count].isEmpty())
+                if (artistas[count].charAt(artistas[count].length()-1) == 93)
+                    artistas[count] = artistas[count].substring(0, artistas[count].length()-1);
+            //Vê se começa com plica e remove
+            if (!artistas[count].isEmpty())
+                if (artistas[count].charAt(0) == 39)
+                    artistas[count] = artistas[count].substring(1);
+            //Vê se acaba com plica e remove
+            if (!artistas[count].isEmpty())
+                if (artistas[count].charAt(artistas[count].length()-1) == 39)
+                    artistas[count] = artistas[count].substring(0,artistas[count].length()-1);
+
+            if (!artistas[count].isEmpty())
+                if (artistas[count].charAt(0) == 34 && artistas[count].charAt(0) == artistas[count].charAt(1)) {
+                    artistas[count] = artistas[count].substring(2);
+                    artistas[count] = artistas[count].substring(0,artistas[count].length()-2);
+                }
+        }
+        return artistas;
+    }
 }

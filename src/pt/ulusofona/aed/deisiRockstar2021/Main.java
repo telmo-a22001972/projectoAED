@@ -29,6 +29,8 @@ public class Main {
     public static HashSet<String> hashSetComTodosOsArtistas = new HashSet<>();
     public static HashMap<String, ArrayList<String>> artistasESuasTags = new HashMap<>();
     public static HashMap<String, ArrayList<String>> tagsESeusArtistas = new HashMap<>();
+    public static HashMap<String, ArrayList<Song>> usarNoRisingStars = new HashMap<>();
+    public static int nLinhas = 0;
 
 
     public static void main(String[] args) throws IOException {
@@ -37,18 +39,19 @@ public class Main {
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
-
+        System.out.println(parseInfoSongsArtistsTxTFinal.toString());
         Queries.menu();
 
 
     }
 
     public static void loadFiles() throws IOException {
+        loadfiles("songs.txt","song_artists.txt","song_details.txt");
 
         System.out.println("----------------------LEITURA DO FICHEIRO songs.txt------------");
 
         long start = System.currentTimeMillis();
-        lerFicheiros.lerSongs();
+        lerFicheiros.lerSongs("songs.txt");
         long end = System.currentTimeMillis();
         System.out.println("(took " + (end - start) + " ms)\n");
 
@@ -56,7 +59,7 @@ public class Main {
         System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
 
         long startArtists = System.currentTimeMillis();
-        lerFicheiros.lerSongsArtists();
+        lerFicheiros.lerSongsArtists("song_artists.txt");
         long endArtists = System.currentTimeMillis();
         System.out.println("(took " + (endArtists - startArtists) + " ms)\n");
 
@@ -66,7 +69,7 @@ public class Main {
         System.out.println("----------------------LEITURA DO FICHEIRO song_details.txt------------");
 
         long startDetails = System.currentTimeMillis();
-        lerFicheiros.lerSongDetails();
+        lerFicheiros.lerSongDetails("song_details.txt");
         long endDetails = System.currentTimeMillis();
         System.out.println("(took " + (endDetails - startDetails) + " ms)\n");
 
@@ -149,7 +152,7 @@ public class Main {
 
     public static String getCreativeQuery(){
 
-        return "GET_YEAR_HIGHER_DURATION_MUSIC";
+        return "GET_YEAR_HIGHER_DURATION_MUSIC 2020 20";
     }
 
     public static int getTypeOfSecondParameter()
@@ -160,6 +163,17 @@ public class Main {
     public static String getVideoUrl()
     {
         return "TEMP";
+    }
+
+    public static void loadfiles(String filenameSongs, String filenameArtists, String filenameDetails){
+        long start = System.currentTimeMillis();
+        lerFicheiros.lerSongs(filenameSongs);
+
+        lerFicheiros.lerSongsArtists(filenameArtists);
+
+        lerFicheiros.lerSongDetails(filenameDetails);
+        long end = System.currentTimeMillis();
+        System.out.println("(took " + (end - start) + " ms)\n");
     }
 
 }

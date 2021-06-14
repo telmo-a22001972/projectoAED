@@ -78,9 +78,11 @@ public class Song {
 
             for (int i = 1; i < musica.artistas.length; i++) {
                 if (musica.artistas[i] != null) {
-                    nMusicas = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome);
-                    nMusicasString += " / " + String.valueOf(nMusicas);
-                }
+
+                        nMusicas = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome);
+                        nMusicasString += " / " + String.valueOf(nMusicas);
+                    }
+
             }
         }
         musica.nMusicas = nMusicasString;
@@ -109,8 +111,9 @@ public class Song {
             int[] nMusicas = new int[musica.artistas.length];
             for (int k = 0; k < nMusicas.length; k++) {
                 if (musica.artistas[k] != null) {
-                    nMusicas[k] = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
-                }
+                        nMusicas[k] = Main.hashMapComArtistasESuasMusicasFinal.get(musica.artistas[k].nome); //musica.artistas[k].numeroDeMusicas;
+                    }
+
             }
             for (int u = 0; u < musica.artistas.length; u++) {
                 if (musica.artistas[u] != null) {

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static pt.ulusofona.aed.deisiRockstar2021.Main.loadFiles;
+import static pt.ulusofona.aed.deisiRockstar2021.Main.*;
 
 
 public class TestXXX {
@@ -13,52 +13,53 @@ public class TestXXX {
     public static void main(String[] args) {
 
     }
-    @org.junit.Test
-    public void testGetSongToString3Musicas() throws IOException {
-        Song song2 = new Song("1oYYd2gnWZYrt89EBXdFiO","Message In A Bottles",null,1979,0,false,0,0,0,0);
-
-        Assert.assertEquals("1oYYd2gnWZYrt89EBXdFiO | Message In A Bottles | 1979",song2.toString());
-
-    }
-
-    @org.junit.Test
-    public void testGetSongToString2Musicas() throws IOException {
-        Song song1 = new Song("1oYYd2gnWZYrt89EBXdFiO","Message In A Bottle",null,1979,0,false,0,0,0,0);
-
-        Assert.assertEquals("1oYYd2gnWZYrt89EBXdFiO | Message In A Bottle | 1979",song1.toString());
+    @Test
+    public void countSongsYear(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
+        Assert.assertEquals(0,Integer.parseInt(Main.execute("COUNT_SONGS_YEAR 2000")));
     }
 
     @Test
-    public void testeGetSongsYear() throws IOException {
-        Main.loadFiles();
-        Assert.assertEquals("2016",Main.execute("GET_SONGS_YEAR 2000"));
+    public void countDuplicateSongYear(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
+        Assert.assertEquals(0,Integer.parseInt(Main.execute("COUNT_DUPLICATE_SONGS_YEAR 2000")));
     }
 
     @Test
-    public void contarNumeroMusicasDoArtista() throws IOException {
-        Main.loadFiles();
-        Assert.assertEquals(10,Artista.numeroMusicasDoArtista("White Lion"));
+    public void getArtistsForTag(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
+        Main.execute("ADD_TAGS Thom Yorke;yau");
+        String result = Main.execute("GET_ARTISTS_FOR_TAG YAU");
+        Assert.assertEquals("Thom Yorke | YAU", result);
     }
 
     @Test
-    public void getSongsFicheiroPequeno() throws  IOException {
-        Main.loadFiles();
-        Assert.assertEquals(1, Main.songsTxtFinal.size());
+    public void getMostDanceable(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
+        String result = Main.execute("GET_MOST_DANCEABLE 2000 2020 1");
+        Assert.assertEquals("Black Swan : 2006 : 0.0\n",result);
     }
 
     @Test
-    public void toStringSimpleFile() throws  IOException {
-        Main.loadFiles();
+    public void getUniqueTags(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
 
-        Assert.assertEquals("3vNFsxBbA4dPkymPF5Jm1b | This Mess We're In | 2000 | 3:55 | 62.0 | PJ Harvey / Thom Yorke | (1 / 4)", Main.hashMapComMusicasFinal.get("3vNFsxBbA4dPkymPF5Jm1b").toString());
+        String result = Main.execute("GET_UNIQUE_TAGS");
+        Assert.assertEquals("",result);
     }
 
     @Test
-    public void testParseInfoArtists() throws  IOException {
-        Main.loadFiles();
-        Main.loadFiles();
-        Assert.assertEquals("OK: 2, Ignored: 4", Main.getParseInfo("song_artists.txt").toString());
+    public void addTags(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
+        String result = Main.execute("ADD_TAGS Thom Yorke;yau");
+        Assert.assertEquals("Inexistent artist",result);
     }
 
+    @Test
+    public void removeTags(){
+        Main.loadfiles("C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\songs.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_details.txt","C:\\Users\\TESTES\\IdeaProjects\\projeto2\\test-files\\song_artists.txt");
+        String result = Main.execute("REMOVE_TAGS Thom Yorke;yau");
+        Assert.assertEquals("Inexistent artist",result);
+    }
 
 }

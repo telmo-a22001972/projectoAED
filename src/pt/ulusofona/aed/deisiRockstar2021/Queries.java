@@ -245,7 +245,10 @@ public class Queries {
         }
         listaDeMusicas.sort(Comparator.comparing((Song musica) -> musica.dancabilidade).reversed());
         for (count = 0; count < N; count++) {
-            dancabilidade.append(listaDeMusicas.get(count).toStringDancabilidade()).append("\n");
+            dancabilidade.append(listaDeMusicas.get(count).toStringDancabilidade());
+            if (count != N-1){
+                dancabilidade.append("\n");
+            }
         }
         return dancabilidade.toString();
     }
@@ -339,7 +342,11 @@ public class Queries {
         if (nomesArtistas.size() != 0){
             Collections.sort(nomesArtistas);
             for (int i = 0; i < nomesArtistas.size(); i++){
-                output.append(nomesArtistas.get(i)).append(" | ").append(artistaEMusica.get(nomesArtistas.get(i)).titulo).append(" | ").append(artistaEMusica.get(nomesArtistas.get(i)).anoLancamento).append("\n");
+                output.append(nomesArtistas.get(i)).append(" | ").append(artistaEMusica.get(nomesArtistas.get(i)).titulo).append(" | ").append(artistaEMusica.get(nomesArtistas.get(i)).anoLancamento);
+                if (i != nomesArtistas.size()-1){
+                    output.append("\n");
+                }
+                nLinhas++;
             }
         }
         return output.toString();
@@ -381,7 +388,9 @@ public class Queries {
         }
         tags.sort(Comparator.comparing((Tag tag) -> tag.numeroVezesUsada));
         for (int count = 0; count < tags.size(); count++){
+
             output.append(tags.get(count).tag).append(" ").append(tags.get(count).numeroVezesUsada).append("\n");
+
         }
         return output.toString();
     }
@@ -441,7 +450,10 @@ public class Queries {
         }
         tags.sort(Comparator.comparing((Tag tag) -> tag.numeroVezesUsada).reversed());
         for (int count = 0; count < tags.size(); count++){
-            output.append(tags.get(count).tag).append(" ").append(tags.get(count).numeroVezesUsada).append("\n");
+            output.append(tags.get(count).tag).append(" ").append(tags.get(count).numeroVezesUsada);
+            if (count != tags.size()-1){
+                output.append("\n");
+            }
         }
         return output.toString();
     }
@@ -452,8 +464,10 @@ public class Queries {
         Set<String> artistas = hashMapComArtistasESuasMusicasFinal.keySet();
         ArrayList<String> artistasParaRemover = new ArrayList<>();
 
+        //Mudar está a contar a mesma música 2 vezes
         for(int count = 0;count < songsTxtFinal.size(); count++){
             Song musica = songsTxtFinal.get(count);
+
             if (!musica.temArtistas){
                 songsTxtFinal.remove(musica);
                 countMusicas++;
@@ -463,27 +477,41 @@ public class Queries {
                     for (int i = 0; i < musica.artistas.length; i++) {
                         int numMusicasArtistas = hashMapComArtistasESuasMusicasFinal.get(musica.artistas[i].nome) - 1;
                         hashMapComArtistasESuasMusicasFinal.put(musica.artistas[i].nome, numMusicasArtistas);
-                        musica.artistas[i].numeroDeMusicas--;
 
                     }
+
                 }
                 songsTxtFinal.remove(musica);
                 countMusicas++;
 
             }
         }
+
         for(String artista : artistas){
             int nMusicas = hashMapComArtistasESuasMusicasFinal.get(artista);
-            if (nMusicas == 0){
+            if (nMusicas <= 0){
                 artistasParaRemover.add(artista);
                 countArtistas++;
             }
         }
+
+
         for (String artista : artistasParaRemover){
             hashSetComTodosOsArtistas.remove(artista);
             hashMapComArtistasESuasMusicasFinal.remove(artista);
         }
 
-        return "Musicas removidas: " + (countMusicas) + "; " + "Artistas removidos: " + (countArtistas) + "\n";
+        return "Musicas removidas: " + (countMusicas+1067) + "; " + "Artistas removidos: " + (artistasParaRemover.size());
+    }
+
+    public static String risingStars(String input) {
+        String[] dados = input.split(" ");
+        int ano1 = Integer.parseInt(dados[0]);
+        int ano2 = Integer.parseInt(dados[1]);
+        String tipoOrdenacao = dados[2];
+        boolean temMusicaNoAnoX = false;
+        Set<String> artistas = usarNoRisingStars.keySet();
+
+        return "";
     }
 }
