@@ -1,13 +1,11 @@
 
 package pt.ulusofona.aed.deisiRockstar2021;
-import javax.management.monitor.StringMonitor;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import static pt.ulusofona.aed.deisiRockstar2021.Queries.*;
 
-                                            //FAZER O NUMERO DE MUSICAS DE CADA ARTISTA
+
 
 public class Main {
     public static ArrayList < Song > songsTxt = new ArrayList<>();
@@ -39,7 +37,7 @@ public class Main {
 
         System.out.println("\n----------------------TESTE DO MAIN----------------------");
 
-        System.out.println(parseInfoSongsArtistsTxTFinal.toString());
+        System.out.println(hashMapComMusicasFinal.get("3vNFsxBbA4dPkymPF5Jm1b"));
         Queries.menu();
 
 
@@ -51,7 +49,7 @@ public class Main {
         System.out.println("----------------------LEITURA DO FICHEIRO songs.txt------------");
 
         long start = System.currentTimeMillis();
-        lerFicheiros.lerSongs("songs.txt");
+        LerFicheiros.lerSongs("songs.txt");
         long end = System.currentTimeMillis();
         System.out.println("(took " + (end - start) + " ms)\n");
 
@@ -59,7 +57,7 @@ public class Main {
         System.out.println("----------------------LEITURA DO FICHEIRO song_artists.txt------------\n");
 
         long startArtists = System.currentTimeMillis();
-        lerFicheiros.lerSongsArtists("song_artists.txt");
+        LerFicheiros.lerSongsArtists("song_artists.txt");
         long endArtists = System.currentTimeMillis();
         System.out.println("(took " + (endArtists - startArtists) + " ms)\n");
 
@@ -69,7 +67,7 @@ public class Main {
         System.out.println("----------------------LEITURA DO FICHEIRO song_details.txt------------");
 
         long startDetails = System.currentTimeMillis();
-        lerFicheiros.lerSongDetails("song_details.txt");
+        LerFicheiros.lerSongDetails("song_details.txt");
         long endDetails = System.currentTimeMillis();
         System.out.println("(took " + (endDetails - startDetails) + " ms)\n");
 
@@ -134,7 +132,7 @@ public class Main {
                 return getArtistsOneSong(comando[1]);
 
             case "GET_YEAR_HIGHER_DURATION_MUSIC" :
-                return getYearHighDurationMusic(comando[1]);
+                return getYearHighestDurationMusic(comando[1]);
 
             case "GET_UNIQUE_TAGS" :
                 return getUniqueTags();
@@ -162,16 +160,16 @@ public class Main {
 
     public static String getVideoUrl()
     {
-        return "TEMP";
+        return "https://youtu.be/VlUVxBiX7n8";
     }
 
     public static void loadfiles(String filenameSongs, String filenameArtists, String filenameDetails){
         long start = System.currentTimeMillis();
-        lerFicheiros.lerSongs(filenameSongs);
+        LerFicheiros.lerSongs(filenameSongs);
 
-        lerFicheiros.lerSongsArtists(filenameArtists);
+        LerFicheiros.lerSongsArtists(filenameArtists);
 
-        lerFicheiros.lerSongDetails(filenameDetails);
+        LerFicheiros.lerSongDetails(filenameDetails);
         long end = System.currentTimeMillis();
         System.out.println("(took " + (end - start) + " ms)\n");
     }
